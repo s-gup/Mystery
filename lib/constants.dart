@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 const kSendButtonTextStyle = TextStyle(
@@ -20,9 +21,11 @@ const kMessageContainerDecoration = BoxDecoration(
 const kTempTextStyle = TextStyle(
   fontFamily: 'Spartan MB',
   fontSize: 100.0,
+  color: Colors.white,
 );
 
 const kMessageTextStyle = TextStyle(
   fontFamily: 'Spartan MB',
   fontSize: 30.0,
+  color: Colors.white,
 );
