@@ -20,9 +20,12 @@ const kMessageContainerDecoration = BoxDecoration(
 const kTempTextStyle = TextStyle(
   fontFamily: 'Spartan MB',
   fontSize: 100.0,
+  color: Colors.white,
 );
 
 const kMessageTextStyle = TextStyle(
   fontFamily: 'Spartan MB',
   fontSize: 30.0,
+  color: Colors.white,
 );
+

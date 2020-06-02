@@ -76,6 +76,7 @@ class _JoinScreenState extends State<JoinScreen> {
                     FlatButton(
                       onPressed: () {
                         if(id.trim()=="1543") {
+
                           Navigator.pushNamed(context, CommonScreen.id);
                         }
                         //Implement send functionality.

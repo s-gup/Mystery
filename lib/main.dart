@@ -1,3 +1,12 @@
+import 'package:flash_chat/screens/common_screen.dart';
+import 'package:flash_chat/screens/fifth_screen.dart';
+import 'package:flash_chat/screens/first_screen.dart';
+import 'package:flash_chat/screens/fourth_screen.dart';
+import 'package:flash_chat/screens/id_screen.dart';
+import 'package:flash_chat/screens/join_screen.dart';
+import 'package:flash_chat/screens/room_screen.dart';
+import 'package:flash_chat/screens/second_screen.dart';
+import 'package:flash_chat/screens/third_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flash_chat/screens/login_screen.dart';
@@ -31,7 +40,17 @@ class FlashChat extends StatelessWidget {
         LoginScreen.id:(context) => LoginScreen(),
         RegistrationScreen.id:(context)=>RegistrationScreen(),
         ChatScreen.id:(context)=>ChatScreen(),
+        FirstScreen.id:(context)=>FirstScreen(),
+        SecondScreen.id:(context)=>SecondScreen(),
+
+        FourthScreen.id:(context)=>FourthScreen(),
+        FifthScreen.id:(context)=>FifthScreen(),
+        JoinScreen.id:(context)=>JoinScreen(),
+        IdScreen.id:(context)=>IdScreen(),
+        RoomScreen.id:(context)=>RoomScreen(),
+        CommonScreen.id:(context)=>CommonScreen(),
       },
+
     );
   }
 }

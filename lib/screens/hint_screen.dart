@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'chat_screen.dart';
 import 'hints.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -60,7 +61,7 @@ class _HintScreenState extends State<HintScreen> {
                 children: <Widget>[
                   FlatButton(
                     onPressed: () {
-                      //TODO: go to chat
+                      Navigator.pushNamed(context, ChatScreen.id);
                     },
                     child: Icon(
                       Icons.chat,
@@ -82,35 +83,37 @@ class _HintScreenState extends State<HintScreen> {
                   ],
                 ),
               ),
-              FlippingCard(
-                frontChild: Container(
-                    width: 200,
-                    height: 450,
-                    color: Colors.transparent,
-                    child: Center(
-                      child: AutoSizeText(
-                        commonMessage,
-                        style: kMessageTextStyle,
-                      ),
-                    )),
-                backChild: Container(
-                    width: 200,
-                    height: 450,
-                    color: Colors.transparent,
-                    child: Center(
-                      child: AutoSizeText(
-                        hintMessage,
-                        style: kMessageTextStyle,
-                      ),
-                    )),
-                side: _card1Side,
-                onTap: (side) {
-                  setState(() {
-                    _card1Side = (side == CardSide.FrontSide)
-                        ? CardSide.BackSide
-                        : CardSide.FrontSide;
-                  });
-                },
+              Expanded(
+                child: FlippingCard(
+                  frontChild: Container(
+                      width: 200,
+                      height: 450,
+                      color: Colors.transparent,
+                      child: Center(
+                        child: AutoSizeText(
+                          commonMessage,
+                          style: kMessageTextStyle,
+                        ),
+                      )),
+                  backChild: Container(
+                      width: 200,
+                      height: 450,
+                      color: Colors.transparent,
+                      child: Center(
+                        child: AutoSizeText(
+                          hintMessage,
+                          style: kMessageTextStyle,
+                        ),
+                      )),
+                  side: _card1Side,
+                  onTap: (side) {
+                    setState(() {
+                      _card1Side = (side == CardSide.FrontSide)
+                          ? CardSide.BackSide
+                          : CardSide.FrontSide;
+                    });
+                  },
+                ),
               ),
             ],
           ),
