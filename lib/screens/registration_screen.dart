@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,6 +48,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               },
               decoration: InputDecoration(
                 hintText: 'Enter your email',
+                hintStyle: TextStyle(
+                  color: Colors.black54,
+                ),
                 fillColor: Colors.black,
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
@@ -78,6 +82,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               },
               decoration: InputDecoration(
                 hintText: 'Enter your password',
+                hintStyle: TextStyle(
+                  color: Colors.black54,
+                ),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
@@ -111,7 +118,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           email: email, password: password);
                       if(newUser!=null){
                         print("yo");
-                        Navigator.pushNamed(context, ChatScreen.id);
+                        Navigator.pushNamed(context, LoginScreen.id);
                       }
                     }
                     catch(e){

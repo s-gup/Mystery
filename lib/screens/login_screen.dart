@@ -1,3 +1,8 @@
+import 'package:flash_chat/screens/first_screen.dart';
+import 'package:flash_chat/screens/join_screen.dart';
+import 'package:flash_chat/screens/myclass.dart';
+import 'package:flash_chat/screens/room_screen.dart';
+import 'package:flash_chat/screens/third_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -44,6 +49,9 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               decoration: InputDecoration(
                 hintText: 'Enter your email',
+                hintStyle: TextStyle(
+                  color: Colors.black54,
+                ),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
@@ -76,6 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               decoration: InputDecoration(
                 hintText: 'Enter your password.',
+                hintStyle: TextStyle(
+                  color: Colors.black54,
+                ),
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                 border: OutlineInputBorder(
@@ -105,12 +116,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: MaterialButton(
                   onPressed: () async{
                     try {
-                      print(email);
-                      print(password);
+
                       final userd = (await _auth.signInWithEmailAndPassword(
                           email: email.trim(), password: password)).user;
                       if (userd != null) {
-                        Navigator.pushNamed(context, ChatScreen.id);
+                        myclass cl=myclass();
+                        cl.addinmap(_auth, email);
+                        Navigator.pushNamed(context,RoomScreen.id);
                       }
                     }
                     catch(e){print(e);
