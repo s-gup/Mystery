@@ -17,3 +17,12 @@ const kMessageContainerDecoration = BoxDecoration(
     top: BorderSide(color: Colors.lightBlueAccent, width: 2.0),
   ),
 );
+const kTempTextStyle = TextStyle(
+  fontFamily: 'Spartan MB',
+  fontSize: 100.0,
+);
+
+const kMessageTextStyle = TextStyle(
+  fontFamily: 'Spartan MB',
+  fontSize: 30.0,
+);

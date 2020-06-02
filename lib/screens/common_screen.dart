@@ -1,22 +1,21 @@
 import 'package:flash_chat/screens/second_screen.dart';
 import 'package:flutter/material.dart';
+import 'hint_screen.dart';
 
 import 'login_screen.dart';
 import 'registration_screen.dart';
 
 class CommonScreen extends StatefulWidget {
-  static const String id='common_screen';
+  static const String id = 'common_screen';
   @override
   _CommonScreenState createState() => _CommonScreenState();
 }
 
 class _CommonScreenState extends State<CommonScreen> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -37,8 +36,15 @@ class _CommonScreenState extends State<CommonScreen> {
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
                   onPressed: () {
-                   // Navigator.pushNamed(context, LoginScreen.id);
+                    // Navigator.pushNamed(context, LoginScreen.id);
                     //Go to login screen.
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return HintScreen(
+                        hintKey: 1,
+                        hintType: true,
+                      );
+                    }));
                   },
                   minWidth: 200.0,
                   height: 42.0,
@@ -58,6 +64,13 @@ class _CommonScreenState extends State<CommonScreen> {
                   onPressed: () {
                     //Navigator.pushNamed(context, SecondScreen.id);
                     //Go to login screen.
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return HintScreen(
+                        hintKey: 2,
+                        hintType: true,
+                      );
+                    }));
                   },
                   minWidth: 200.0,
                   height: 42.0,
@@ -77,6 +90,13 @@ class _CommonScreenState extends State<CommonScreen> {
                   onPressed: () {
                     //Navigator.pushNamed(context, RegistrationScreen.id);
                     //Go to registration screen.
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return HintScreen(
+                        hintKey: 3,
+                        hintType: true,
+                      );
+                    }));
                   },
                   minWidth: 200.0,
                   height: 42.0,
@@ -94,8 +114,15 @@ class _CommonScreenState extends State<CommonScreen> {
                 elevation: 5.0,
                 child: MaterialButton(
                   onPressed: () {
-                   // Navigator.pushNamed(context, RegistrationScreen.id);
+                    // Navigator.pushNamed(context, RegistrationScreen.id);
                     //Go to registration screen.
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return HintScreen(
+                        hintKey: 4,
+                        hintType: true,
+                      );
+                    }));
                   },
                   minWidth: 200.0,
                   height: 42.0,
@@ -113,8 +140,15 @@ class _CommonScreenState extends State<CommonScreen> {
                 elevation: 5.0,
                 child: MaterialButton(
                   onPressed: () {
-                   // Navigator.pushNamed(context, RegistrationScreen.id);
+                    // Navigator.pushNamed(context, RegistrationScreen.id);
                     //Go to registration screen.
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return HintScreen(
+                        hintKey: 5,
+                        hintType: false,
+                      );
+                    }));
                   },
                   minWidth: 200.0,
                   height: 42.0,
