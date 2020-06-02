@@ -12,6 +12,7 @@ import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
+import 'screens/waiting_room.dart';
 
 import 'screens/chat_screen.dart';
 import 'screens/chat_screen.dart';
@@ -34,23 +35,22 @@ class FlashChat extends StatelessWidget {
           body1: TextStyle(color: Colors.black54),
         ),
       ),
-      initialRoute:WelcomeScreen.id ,
+      initialRoute: WelcomeScreen.id,
       routes: {
-        WelcomeScreen.id:(context) => WelcomeScreen(),
-        LoginScreen.id:(context) => LoginScreen(),
-        RegistrationScreen.id:(context)=>RegistrationScreen(),
-        ChatScreen.id:(context)=>ChatScreen(),
-        FirstScreen.id:(context)=>FirstScreen(),
-        SecondScreen.id:(context)=>SecondScreen(),
-
-        FourthScreen.id:(context)=>FourthScreen(),
-        FifthScreen.id:(context)=>FifthScreen(),
-        JoinScreen.id:(context)=>JoinScreen(),
-        IdScreen.id:(context)=>IdScreen(),
-        RoomScreen.id:(context)=>RoomScreen(),
-        CommonScreen.id:(context)=>CommonScreen(),
+        WelcomeScreen.id: (context) => WelcomeScreen(),
+        LoginScreen.id: (context) => LoginScreen(),
+        RegistrationScreen.id: (context) => RegistrationScreen(),
+        ChatScreen.id: (context) => ChatScreen(),
+        FirstScreen.id: (context) => FirstScreen(),
+        SecondScreen.id: (context) => SecondScreen(),
+        FourthScreen.id: (context) => FourthScreen(),
+        FifthScreen.id: (context) => FifthScreen(),
+        JoinScreen.id: (context) => JoinScreen(),
+        IdScreen.id: (context) => IdScreen(),
+        RoomScreen.id: (context) => RoomScreen(),
+        CommonScreen.id: (context) => CommonScreen(),
+        WaitScreen.id: (context) => WaitScreen(),
       },
-
     );
   }
 }

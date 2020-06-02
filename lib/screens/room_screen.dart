@@ -2,23 +2,22 @@ import 'package:flash_chat/screens/id_screen.dart';
 import 'package:flash_chat/screens/join_screen.dart';
 import 'package:flash_chat/screens/second_screen.dart';
 import 'package:flutter/material.dart';
+import 'count_perroom.dart';
 
 import 'login_screen.dart';
 import 'registration_screen.dart';
 
 class RoomScreen extends StatefulWidget {
-  static const String id='room_screen';
+  static const String id = 'room_screen';
   @override
   _RoomScreenState createState() => _RoomScreenState();
 }
 
 class _RoomScreenState extends State<RoomScreen> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -58,7 +57,7 @@ class _RoomScreenState extends State<RoomScreen> {
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
                   onPressed: () {
-                    Navigator.pushNamed(context,JoinScreen.id);
+                    Navigator.pushNamed(context, JoinScreen.id);
                     //Go to login screen.
                   },
                   minWidth: 200.0,
