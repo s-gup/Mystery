@@ -72,7 +72,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
             children: <Widget>[
               StreamBuilder<QuerySnapshot>(
-                stream: _firestore.collection('messages').snapshots(),
+                stream: _firestore.collection('messages').orderBy('date').snapshots(),
                 builder: (context,snapshot){
                   if(!snapshot.hasData){
                     return Center(
@@ -81,16 +81,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     );
                   }
-                  final messages=snapshot.data.documents;
+                  final messages=snapshot.data.documents.reversed;
                   List<MessageBubble> messageWidgets=[];
                   for(var message in messages){
                     final messageText=message.data['text'];
                     final messagesender=message.data['sender'];
-                    final messageTime = message.data["time"];
                     final currentUser=loggin.email;
-                    final messagewidge=MessageBubble(sender: messagesender,text: messageText,time: messageTime,isme: currentUser==messagesender,);
+                    final messagewidge=MessageBubble(sender: messagesender,text: messageText,isme: currentUser==messagesender,);
                     messageWidgets.add(messagewidge);
-                    messageWidgets.sort((a , b ) => b.time.compareTo(a.time));
                   }
                   return Expanded(
                     child: ListView(
@@ -130,7 +128,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         _firestore.collection('messages').add({
                           'text':messagetext,
                            'sender':loggin.email,
-                            'time':DateTime.now(),
+                          'date': DateTime.now().toIso8601String().toString(),
                         });
                         //Implement send functionality.
                       },
@@ -150,10 +148,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.sender,this.text,this.isme,this.time});
+  MessageBubble({this.sender,this.text,this.isme});
   final String sender;
   final String text;
-  final Timestamp time;
   final bool isme;
   @override
   Widget build(BuildContext context) {
