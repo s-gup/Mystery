@@ -6,6 +6,10 @@ import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'timer.dart';
+import 'package:timer_count_down/timer_count_down.dart';
+import 'chat_screen.dart';
+import 'package:timer_count_down/timer_controller.dart';
+import 'result_screen.dart';
 
 class CommonScreen extends StatefulWidget {
   static const String id = 'common_screen';
@@ -15,34 +19,32 @@ class CommonScreen extends StatefulWidget {
 }
 
 class _CommonScreenState extends State<CommonScreen> {
-
   @override
   void initState() {
     super.initState();
-
   }
+
   Future<bool> _onBackPressed() {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit an App'),
-        actions: <Widget>[
-          new GestureDetector(
-            onTap: () => Navigator.of(context).pop(false),
-            child: Text("NO"),
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: Text("NO"),
+              ),
+              SizedBox(height: 16),
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(true),
+                child: Text("YES"),
+              ),
+            ],
           ),
-          SizedBox(height: 16),
-          new GestureDetector(
-            onTap: () => Navigator.of(context).pop(true),
-            child: Text("YES"),
-          ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,33 @@ class _CommonScreenState extends State<CommonScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  elevation: 5.0,
+                  color: Colors.lightBlueAccent,
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: MaterialButton(
+                    minWidth: 200.0,
+                    height: 42.0,
+                    child: FlatButton(
+                      color: Colors.green,
+                      child: Countdown(
+                        seconds: 10,
+                        build: (_, timer) => Text(timer.toString()),
+                        interval: Duration(
+                          milliseconds: 100,
+                        ),
+                        onFinished: () {
+                          //TODO: move to chat screen
+                          Navigator.pushNamed(context, ChatScreen.id);
+                          print('50 s completete codkcedkior!');
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Material(

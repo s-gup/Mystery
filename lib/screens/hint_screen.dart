@@ -4,6 +4,10 @@ import 'hints.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flipping_card/flipping_card.dart';
+import 'timer.dart';
+import 'package:timer_count_down/timer_count_down.dart';
+
+import 'package:timer_count_down/timer_controller.dart';
 
 class HintScreen extends StatefulWidget {
   final hintKey;
@@ -29,6 +33,7 @@ class _HintScreenState extends State<HintScreen> {
     super.initState();
     key = widget.hintKey;
     bool type = widget.hintType;
+
     if (type == true) {
       hintMessage = hintModel.getTrueHint(key);
     } else {
@@ -59,15 +64,16 @@ class _HintScreenState extends State<HintScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, ChatScreen.id);
-                    },
-                    child: Icon(
-                      Icons.chat,
-                      size: 50.0,
-                    ),
-                  ),
+//                  FlatButton(
+//                    onPressed: () {
+//                      Navigator.pushNamed(context, ChatScreen.id);
+//                    },
+//                    child: Icon(
+//                      Icons.chat,
+//                      size: 50.0,
+//                    ),
+//                  ),
+
 //
                 ],
               ),

@@ -6,6 +6,7 @@ import 'package:flash_chat/screens/first_screen.dart';
 import 'package:flash_chat/screens/fourth_screen.dart';
 import 'package:flash_chat/screens/id_screen.dart';
 import 'package:flash_chat/screens/join_screen.dart';
+import 'package:flash_chat/screens/result_screen.dart';
 import 'package:flash_chat/screens/room_screen.dart';
 import 'package:flash_chat/screens/second_screen.dart';
 import 'package:flash_chat/screens/third_screen.dart';
@@ -25,6 +26,7 @@ import 'screens/registration_screen.dart';
 import 'screens/registration_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/welcome_screen.dart';
+import 'screens/result_screen.dart';
 
 void main() => runApp(FlashChat());
 

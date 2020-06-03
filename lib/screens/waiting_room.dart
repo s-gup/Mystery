@@ -20,7 +20,7 @@ class _WaitScreenState extends State<WaitScreen> {
     setState(() {
       countRoom.getCount();
     });
-    if (countRoom.getCount() == 5) {
+    if (countRoom.getCount() >= 5) {
       return Column(
         children: <Widget>[
           FlatButton(
@@ -38,7 +38,6 @@ class _WaitScreenState extends State<WaitScreen> {
                 milliseconds: 100,
               ),
               onFinished: () {
-                Timer.countDownStart();
                 print('Timer is done!');
                 Navigator.pushNamed(context, CommonScreen.id);
               },
