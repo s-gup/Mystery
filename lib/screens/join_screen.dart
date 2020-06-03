@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/screens/common_screen.dart';
 import 'package:flash_chat/screens/fifth_screen.dart';
 import 'package:flash_chat/screens/join_screen.dart';
@@ -71,7 +72,7 @@ class _JoinScreenState extends State<JoinScreen> {
                     if (id.trim() == "1543") {
                       countRoom.incrementCount();
                       print(countRoom.getCount());
-                      Navigator.pushNamed(context, WaitScreen.id);
+                      Navigator.pushNamed(context, ChatScreen.id);
                     }
                     //Implement send functionality.
                   },

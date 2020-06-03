@@ -81,14 +81,16 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     );
                   }
-                  final messages=snapshot.data.documents.reversed;
+                  final messages=snapshot.data.documents;
                   List<MessageBubble> messageWidgets=[];
                   for(var message in messages){
                     final messageText=message.data['text'];
                     final messagesender=message.data['sender'];
+                    final messageTime = message.data["time"];
                     final currentUser=loggin.email;
-                    final messagewidge=MessageBubble(sender: messagesender,text: messageText,isme: currentUser==messagesender,);
+                    final messagewidge=MessageBubble(sender: messagesender,text: messageText,time: messageTime,isme: currentUser==messagesender,);
                     messageWidgets.add(messagewidge);
+                    messageWidgets.sort((a , b ) => b.time.compareTo(a.time));
                   }
                   return Expanded(
                     child: ListView(
@@ -128,6 +130,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         _firestore.collection('messages').add({
                           'text':messagetext,
                            'sender':loggin.email,
+                            'time':DateTime.now(),
                         });
                         //Implement send functionality.
                       },
@@ -147,9 +150,10 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.sender,this.text,this.isme});
+  MessageBubble({this.sender,this.text,this.isme,this.time});
   final String sender;
   final String text;
+  final Timestamp time;
   final bool isme;
   @override
   Widget build(BuildContext context) {
