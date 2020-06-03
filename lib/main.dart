@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flash_chat/screens/common_screen.dart';
 import 'package:flash_chat/screens/fifth_screen.dart';
 import 'package:flash_chat/screens/first_screen.dart';
@@ -27,6 +29,7 @@ import 'screens/welcome_screen.dart';
 void main() => runApp(FlashChat());
 
 class FlashChat extends StatelessWidget {
+  double time;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

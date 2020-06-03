@@ -1,12 +1,15 @@
 import 'package:flash_chat/screens/second_screen.dart';
 import 'package:flutter/material.dart';
 import 'hint_screen.dart';
-
+import 'package:timer_count_down/timer_count_down.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
+import 'package:timer_count_down/timer_controller.dart';
+import 'timer.dart';
 
 class CommonScreen extends StatefulWidget {
   static const String id = 'common_screen';
+
   @override
   _CommonScreenState createState() => _CommonScreenState();
 }
@@ -14,7 +17,6 @@ class CommonScreen extends StatefulWidget {
 class _CommonScreenState extends State<CommonScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
