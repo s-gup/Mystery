@@ -72,7 +72,7 @@ class _JoinScreenState extends State<JoinScreen> {
                     if (id.trim() == "1543") {
                       countRoom.incrementCount();
                       print(countRoom.getCount());
-                      Navigator.pushNamed(context, ChatScreen.id);
+                      Navigator.pushNamed(context, WaitScreen.id);
                     }
                     //Implement send functionality.
                   },
