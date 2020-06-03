@@ -58,7 +58,7 @@ class _RoomScreenState extends State<RoomScreen> {
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, CommonScreen.id);
+                    Navigator.pushNamed(context, JoinScreen.id);
                     //Go to login screen.
                   },
                   minWidth: 200.0,
