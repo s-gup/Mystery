@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/common_screen.dart';
 import 'package:flash_chat/screens/id_screen.dart';
 import 'package:flash_chat/screens/join_screen.dart';
 import 'package:flash_chat/screens/second_screen.dart';
@@ -57,7 +58,7 @@ class _RoomScreenState extends State<RoomScreen> {
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, JoinScreen.id);
+                    Navigator.pushNamed(context, CommonScreen.id);
                     //Go to login screen.
                   },
                   minWidth: 200.0,

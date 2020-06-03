@@ -12,153 +12,180 @@ class CommonScreen extends StatefulWidget {
 }
 
 class _CommonScreenState extends State<CommonScreen> {
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
   }
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit an App'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
+          ),
+          SizedBox(height: 16),
+          new GestureDetector(
+            onTap: () => Navigator.of(context).pop(true),
+            child: Text("YES"),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    // Navigator.pushNamed(context, LoginScreen.id);
-                    //Go to login screen.
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return HintScreen(
-                        hintKey: 1,
-                        hintType: true,
-                      );
-                    }));
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'CHARACTER 1',
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  elevation: 5.0,
+                  color: Colors.lightBlueAccent,
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: MaterialButton(
+                    onPressed: () {
+                      // Navigator.pushNamed(context, LoginScreen.id);
+                      //Go to login screen.
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return HintScreen(
+                          hintKey: 1,
+                          hintType: true,
+                        );
+                      }));
+                    },
+                    minWidth: 200.0,
+                    height: 42.0,
+                    child: Text(
+                      'CHARACTER 1',
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    //Navigator.pushNamed(context, SecondScreen.id);
-                    //Go to login screen.
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return HintScreen(
-                        hintKey: 2,
-                        hintType: true,
-                      );
-                    }));
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'CHARACTER 2',
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  elevation: 5.0,
+                  color: Colors.lightBlueAccent,
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: MaterialButton(
+                    onPressed: () {
+                      //Navigator.pushNamed(context, SecondScreen.id);
+                      //Go to login screen.
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return HintScreen(
+                          hintKey: 2,
+                          hintType: true,
+                        );
+                      }));
+                    },
+                    minWidth: 200.0,
+                    height: 42.0,
+                    child: Text(
+                      'CHARACTER 2',
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    //Navigator.pushNamed(context, RegistrationScreen.id);
-                    //Go to registration screen.
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return HintScreen(
-                        hintKey: 3,
-                        hintType: true,
-                      );
-                    }));
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'CHARACTER 3',
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  color: Colors.blueAccent,
+                  borderRadius: BorderRadius.circular(30.0),
+                  elevation: 5.0,
+                  child: MaterialButton(
+                    onPressed: () {
+                      //Navigator.pushNamed(context, RegistrationScreen.id);
+                      //Go to registration screen.
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return HintScreen(
+                          hintKey: 3,
+                          hintType: true,
+                        );
+                      }));
+                    },
+                    minWidth: 200.0,
+                    height: 42.0,
+                    child: Text(
+                      'CHARACTER 3',
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    // Navigator.pushNamed(context, RegistrationScreen.id);
-                    //Go to registration screen.
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return HintScreen(
-                        hintKey: 4,
-                        hintType: true,
-                      );
-                    }));
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'CHARACTER 4',
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  color: Colors.blueAccent,
+                  borderRadius: BorderRadius.circular(30.0),
+                  elevation: 5.0,
+                  child: MaterialButton(
+                    onPressed: () {
+                      // Navigator.pushNamed(context, RegistrationScreen.id);
+                      //Go to registration screen.
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return HintScreen(
+                          hintKey: 4,
+                          hintType: true,
+                        );
+                      }));
+                    },
+                    minWidth: 200.0,
+                    height: 42.0,
+                    child: Text(
+                      'CHARACTER 4',
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    // Navigator.pushNamed(context, RegistrationScreen.id);
-                    //Go to registration screen.
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return HintScreen(
-                        hintKey: 5,
-                        hintType: false,
-                      );
-                    }));
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'CHARACTER 5',
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  color: Colors.blueAccent,
+                  borderRadius: BorderRadius.circular(30.0),
+                  elevation: 5.0,
+                  child: MaterialButton(
+                    onPressed: () {
+                      // Navigator.pushNamed(context, RegistrationScreen.id);
+                      //Go to registration screen.
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return HintScreen(
+                          hintKey: 5,
+                          hintType: false,
+                        );
+                      }));
+                    },
+                    minWidth: 200.0,
+                    height: 42.0,
+                    child: Text(
+                      'CHARACTER 5',
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

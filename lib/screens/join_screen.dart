@@ -9,13 +9,11 @@ import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'count_perroom.dart';
-
 class JoinScreen extends StatefulWidget {
   static const String id = 'join_screen';
   @override
   _JoinScreenState createState() => _JoinScreenState();
 }
-
 class _JoinScreenState extends State<JoinScreen> {
   final messageTextController = TextEditingController();
   final _firestore = Firestore.instance;
