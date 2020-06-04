@@ -9,11 +9,15 @@ import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'count_perroom.dart';
+import 'back_end.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 class JoinScreen extends StatefulWidget {
   static const String id = 'join_screen';
   @override
   _JoinScreenState createState() => _JoinScreenState();
 }
+
 class _JoinScreenState extends State<JoinScreen> {
   final messageTextController = TextEditingController();
   final _firestore = Firestore.instance;
@@ -22,7 +26,38 @@ class _JoinScreenState extends State<JoinScreen> {
   String id;
   String protein;
   String proteinseq;
-  CountRoom countRoom = CountRoom();
+  //CountRoom countRoom = CountRoom();
+
+  static List<Room> roomList = List();
+  Room room;
+  DatabaseReference roomRef;
+  Room toUpdateRoom;
+
+  @override
+  void initState() async {
+    // TODO: implement initState
+    super.initState();
+    String user = _auth.currentUser().toString();
+
+    roomRef = FirebaseDatabase.instance.reference().child('roomList');
+    //roomRef.onChildAdded.listen(_onEntryAdded);
+    roomRef.onChildChanged.listen(_onEntryChanged);
+  }
+
+  _onEntryChanged(Event event) {
+    var old = roomList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+    setState(() {
+      roomList[roomList.indexOf(old)] = Room.fromSnapshot(event.snapshot);
+    });
+  }
+
+  findUpdateRoom(String id) {
+    toUpdateRoom = roomList.singleWhere((entry) {
+      return entry.roomId == id;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +103,9 @@ class _JoinScreenState extends State<JoinScreen> {
                 FlatButton(
                   onPressed: () {
                     if (id.trim() == "1543") {
-                      countRoom.incrementCount();
-                      print(countRoom.getCount());
+//                      countRoom.incrementCount();
+//                      print(countRoom.getCount());
+
                       Navigator.pushNamed(context, WaitScreen.id);
                     }
                     //Implement send functionality.

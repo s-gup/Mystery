@@ -4,6 +4,7 @@ import 'count_perroom.dart';
 import 'common_screen.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'timer.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class WaitScreen extends StatefulWidget {
   static const String id = 'waiting_room';
