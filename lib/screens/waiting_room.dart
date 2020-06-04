@@ -4,6 +4,22 @@ import 'count_perroom.dart';
 import 'common_screen.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'timer.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'login_screen.dart';
+import 'registration_screen.dart';
+import 'package:flutter/material.dart';
+
+import 'dart:async' show Future;
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flash_chat/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:math';
+
 
 class WaitScreen extends StatefulWidget {
   static const String id = 'waiting_room';
@@ -15,6 +31,17 @@ class _WaitScreenState extends State<WaitScreen> {
   CountRoom countRoom = CountRoom();
   //final CountdownController controller = CountdownController();
   var timer = DateTime.now();
+
+  final DatabaseReference database=FirebaseDatabase.instance.reference().child("test");
+  
+  savedata(){
+    print("yo");
+    database.push().set({
+      "name":"BHAVIK",
+      "age":"19",
+    });
+  }
+
 
   Widget textToDisplay() {
     setState(() {
@@ -51,6 +78,9 @@ class _WaitScreenState extends State<WaitScreen> {
           'WAITING FOR OTHER MEMBERS TO JOIN',
           style: kSendButtonTextStyle,
         ),
+        onPressed: (){
+          savedata();
+        },
       );
     }
   }
