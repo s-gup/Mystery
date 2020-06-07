@@ -1,23 +1,33 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter/material.dart';
 
-class Room {
-  String roomId;
-  String key;
-  List<Future> userList;
-  int counter;
-  //Countdown timer;
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Room(this.roomId, this.userList, this.counter);
+class MessageHandler extends StatefulWidget {
+  @override
+  _MessageHandlerState createState() => _MessageHandlerState();
+}
 
-  Room.fromSnapshot(DataSnapshot snapshot)
-      : key = snapshot.key,
-        roomId = snapshot.value['roomId'],
-        userList = snapshot.value['userList'],
-        counter = snapshot.value['counter'];
-  toJson() {
-    return {
-      "userList": userList,
-      "counter": counter,
-    };
+class _MessageHandlerState extends State<MessageHandler> {
+  StreamSubscription iosSubscription;
+  @override
+  void initState() {
+    super.initState();
+    final Firestore _db = Firestore.instance;
+    final FirebaseMessaging _fcm = FirebaseMessaging();
+    if (Platform.isIOS) {
+      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+        // save the token  OR subscribe to a topic here
+      });
+
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return null;
   }
 }

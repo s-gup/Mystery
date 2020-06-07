@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flash_chat/screens/common_screen.dart';
 import 'package:flash_chat/screens/id_screen.dart';
 import 'package:flash_chat/screens/join_screen.dart';
@@ -6,28 +8,40 @@ import 'package:flutter/material.dart';
 import 'count_perroom.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'back_end.dart';
+import 'join_screen.dart';
 
 class RoomScreen extends StatefulWidget {
   static const String id = 'room_screen';
+  final email;
+  RoomScreen(this.email);
   @override
   _RoomScreenState createState() => _RoomScreenState();
 }
 
 class _RoomScreenState extends State<RoomScreen> {
-  static List<Room> roomList = List();
-  Room room;
+  //static List<Room> roomList = List();
+  String email;
   DatabaseReference roomRef;
+  String roomId;
+  String startTime;
+  String endTime;
+  List<String> toAdd = List();
+  var today;
+  var twoMinutesFromNow;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     // making new room
-    room = Room("1543", List(), 0);
+    email = widget.email;
+
     roomRef = FirebaseDatabase.instance.reference().child("roomList");
 
     //roomRef.onChildAdded.listen(_onEntryAdded);
@@ -39,34 +53,45 @@ class _RoomScreenState extends State<RoomScreen> {
 //    });
   }
 
-  void pushNewDataToServer() {
-    roomRef.push().set(room.toJson());
+//  _onEntryAdded(Event event) {
+//    setState(() {
+//      roomList.add(Room.fromSnapshot(event.snapshot));
+//    });
+//  }
+
+//  _onEntryChanged(Event event) {
+//    var old = roomList.singleWhere((entry) {
+//      return entry.key == event.snapshot.key;
+//    });
+//    setState(() {
+//      roomList[roomList.indexOf(old)] = Room.fromSnapshot(event.snapshot);
+//    });
+//  }
+  void setTime() {
+    today = new DateTime.now();
+    startTime = today.toString();
+    print(today);
+    twoMinutesFromNow = today.add(new Duration(minutes: 2));
+    endTime = twoMinutesFromNow.toString();
+    print(twoMinutesFromNow);
   }
 
-  _onEntryAdded(Event event) {
-    setState(() {
-      roomList.add(Room.fromSnapshot(event.snapshot));
+  Future createNewRoom() async {
+    //room = new Room(1);
+    setTime();
+    DatabaseReference pushedRoomRef = roomRef.push();
+    String jsonList = jsonEncode(toAdd);
+    await pushedRoomRef.set({
+//      "roomId": 1543,
+//      "userList": List(),
+      'count': 0,
+      'currentTime': today.toString(),
+      'endTime': twoMinutesFromNow.toString(),
+      'list': jsonList,
     });
-  }
 
-  _onEntryChanged(Event event) {
-    var old = roomList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-    setState(() {
-      roomList[roomList.indexOf(old)] = Room.fromSnapshot(event.snapshot);
-    });
-  }
-
-  void createNewRoom() {
-    room = Room('1543', List(), 0);
-    roomRef.set({
-      "roomId": 1543,
-      "userList": List(),
-      "counter": 0,
-    });
-    //DatabaseReference pushedRoomRef = roomRef.push();
-    //String id=pushedRoomRef.key;
+    roomId = pushedRoomRef.key;
+    return roomId;
   }
 
   @override
@@ -86,19 +111,12 @@ class _RoomScreenState extends State<RoomScreen> {
                 color: Colors.lightBlueAccent,
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
-                  onPressed: () {
-                    //createNewRoom();
-                    roomRef.push().set({
-                      "roomId": 1543,
-                      "userList": List(),
-                      "counter": 0,
-                    });
+                  onPressed: () async {
+                    String id = await createNewRoom();
 
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return IdScreen(
-                        roomId: '1543',
-                      );
+                      return IdScreen(roomId: id, email: email);
                     }));
                     //Go to login screen.
                   },
@@ -117,8 +135,11 @@ class _RoomScreenState extends State<RoomScreen> {
                 color: Colors.lightBlueAccent,
                 borderRadius: BorderRadius.circular(30.0),
                 child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, JoinScreen.id);
+                  onPressed: () async {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return JoinScreen(email);
+                    }));
                     //Go to login screen.
                   },
                   minWidth: 200.0,

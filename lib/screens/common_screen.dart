@@ -10,6 +10,7 @@ import 'package:timer_count_down/timer_count_down.dart';
 import 'chat_screen.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'result_screen.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 
 class CommonScreen extends StatefulWidget {
   static const String id = 'common_screen';
@@ -76,7 +77,6 @@ class _CommonScreenState extends State<CommonScreen> {
                           milliseconds: 100,
                         ),
                         onFinished: () {
-                          //TODO: move to chat screen
                           Navigator.pushNamed(context, ChatScreen.id);
                           print('50 s completete codkcedkior!');
                         },

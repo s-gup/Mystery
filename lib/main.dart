@@ -6,6 +6,7 @@ import 'package:flash_chat/screens/first_screen.dart';
 import 'package:flash_chat/screens/fourth_screen.dart';
 import 'package:flash_chat/screens/id_screen.dart';
 import 'package:flash_chat/screens/join_screen.dart';
+import 'package:flash_chat/screens/loading_screen.dart';
 import 'package:flash_chat/screens/result_screen.dart';
 import 'package:flash_chat/screens/room_screen.dart';
 import 'package:flash_chat/screens/second_screen.dart';
@@ -27,11 +28,12 @@ import 'screens/registration_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/result_screen.dart';
+import 'screens/loading_screen.dart';
 
 void main() => runApp(FlashChat());
 
 class FlashChat extends StatelessWidget {
-  double time;
+  String email;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -40,8 +42,9 @@ class FlashChat extends StatelessWidget {
           body1: TextStyle(color: Colors.black54),
         ),
       ),
-      initialRoute: LoginScreen.id,
+      initialRoute: WelcomeScreen.id,
       routes: {
+        LoadingScreen.id: (context) => LoadingScreen(),
         WelcomeScreen.id: (context) => WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
@@ -50,11 +53,11 @@ class FlashChat extends StatelessWidget {
         SecondScreen.id: (context) => SecondScreen(),
         FourthScreen.id: (context) => FourthScreen(),
         FifthScreen.id: (context) => FifthScreen(),
-        JoinScreen.id: (context) => JoinScreen(),
+        //JoinScreen.id: (context) => JoinScreen(),
         IdScreen.id: (context) => IdScreen(),
-        RoomScreen.id: (context) => RoomScreen(),
+        //RoomScreen.id: (context) => RoomScreen(),
         CommonScreen.id: (context) => CommonScreen(),
-        WaitScreen.id: (context) => WaitScreen(),
+        //WaitScreen.id: (context) => WaitScreen(),
       },
     );
   }

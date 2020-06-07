@@ -11,7 +11,9 @@ FirebaseUser loggin;
 class IdScreen extends StatefulWidget {
   static const String id = 'id_screen';
   final roomId;
-  IdScreen({this.roomId});
+  final email;
+
+  IdScreen({this.roomId, this.email});
   @override
   _IdScreenState createState() => _IdScreenState();
 }
@@ -25,12 +27,16 @@ class _IdScreenState extends State<IdScreen> {
   String protein;
   String proteinseq;
   String roomId;
+  String email;
+  String endTime;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     roomId = widget.roomId;
+    email = widget.email;
+    //endTime = widget.endTime;
     print(roomId);
   }
 
@@ -50,7 +56,7 @@ class _IdScreenState extends State<IdScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Expanded(
-                      child: Text(
+                      child: SelectableText(
                         'YOUR ROOM ID IS: $roomId',
                         style: TextStyle(
                           color: Colors.black,
@@ -59,7 +65,10 @@ class _IdScreenState extends State<IdScreen> {
                     ),
                     FlatButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, JoinScreen.id);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return JoinScreen(email);
+                        }));
                         //Implement send functionality.
                       },
                       child: Text(

@@ -5,16 +5,17 @@ import 'package:flash_chat/screens/room_screen.dart';
 import 'package:flash_chat/screens/third_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'room_screen.dart';
 import 'chat_screen.dart';
+
 class LoginScreen extends StatefulWidget {
-  static const String id='login_screen';
+  static const String id = 'login_screen';
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _auth=FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
   String email;
   String password;
 
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               onChanged: (value) {
                 //Do something with the user input.
-                email=value;
+                email = value;
               },
               decoration: InputDecoration(
                 hintText: 'Enter your email',
@@ -79,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: Colors.black,
               ),
               onChanged: (value) {
-                password=value;
+                password = value;
                 //Do something with the user input.
               },
               decoration: InputDecoration(
@@ -114,19 +115,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 borderRadius: BorderRadius.all(Radius.circular(30.0)),
                 elevation: 5.0,
                 child: MaterialButton(
-                  onPressed: () async{
+                  onPressed: () async {
                     try {
-
                       final userd = (await _auth.signInWithEmailAndPassword(
-                          email: email.trim(), password: password)).user;
+                              email: email.trim(), password: password))
+                          .user;
                       if (userd != null) {
-                        myclass cl=myclass();
+                        myclass cl = myclass();
                         cl.addinmap(_auth, email);
-                        Navigator.pushNamed(context,RoomScreen.id);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return RoomScreen(email);
+                        }));
                       }
+                    } catch (e) {
+                      print(e);
                     }
-                    catch(e){print(e);
-                    };
+
                     //Implement login functionality.
                   },
                   minWidth: 200.0,
