@@ -33,7 +33,6 @@ import 'screens/loading_screen.dart';
 void main() => runApp(FlashChat());
 
 class FlashChat extends StatelessWidget {
-  String email;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -1,5 +1,5 @@
 class HintModel {
-  String getTrueHint(int key) {
+  String getFalseHint(int key) {
     switch (key) {
       case 1:
         return "Was addicted to drugs, his girlfriend broke up to him because she loves X , due to which he becomes depressed and started having anxiety disorders";
@@ -16,7 +16,7 @@ class HintModel {
     return "";
   }
 
-  String getFalseHint(int key) {
+  String getTrueHint(int key) {
     switch (key) {
       case 5:
         return "He lost a rummy match first time in his life to X , very angry, selfish and egoistic man  ";

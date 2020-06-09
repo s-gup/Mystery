@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'hint_screen.dart';
 import 'package:flash_chat/screens/loading_screen.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -16,10 +16,30 @@ import 'package:flutter/material.dart';
 import 'room_screen.dart';
 import 'loading_screen.dart';
 import 'package:flutter_timer/flutter_timer.dart';
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flash_chat/screens/chat_screen.dart';
+import 'package:flash_chat/screens/common_screen.dart';
+import 'package:flash_chat/screens/fifth_screen.dart';
+import 'package:flash_chat/screens/join_screen.dart';
+import 'package:flash_chat/screens/login_screen.dart';
+import 'waiting_room.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flash_chat/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'count_perroom.dart';
+import 'back_end.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flash_chat/screens/waiting_room.dart';
+import 'user.dart';
+import 'package:flash_chat/screens/waiting_room.dart';
 
 class WaitScreen extends StatefulWidget {
   static const String id = 'waiting_room';
-  //final count;
   final idd;
   final endDay;
   WaitScreen({this.idd, this.endDay});
@@ -28,10 +48,6 @@ class WaitScreen extends StatefulWidget {
 }
 
 class _WaitScreenState extends State<WaitScreen> {
-  //int count=widget.count;
-  //CountRoom countRoom = CountRoom();
-  //final CountdownController controller = CountdownController();
-  //var timer = DateTime.now();
   Duration duration = Duration(
     minutes: 2,
   );
@@ -47,10 +63,13 @@ class _WaitScreenState extends State<WaitScreen> {
   DateTime endTimeplus;
   DateTime endTimesubstract;
   bool timerRunning;
-
+  int sec;
+  DatabaseReference roomRef;
+  List<User> userObjs;
+  String email;
+  final _auth = FirebaseAuth.instance;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     var end = widget.endDay;
@@ -78,9 +97,16 @@ class _WaitScreenState extends State<WaitScreen> {
         .child('count');
     roomRef3 =
         FirebaseDatabase.instance.reference().child('roomList').child(id);
-//    endTimeplus = endTime.add(new Duration(milliseconds: 500));
-//    endTimesubstract = endTime.subtract(new Duration(milliseconds: 500));
-//    timerRunning = true;
+    int val = endTime.compareTo(getCurrentTime());
+    if (val < 0) {
+      Navigator.pushNamed(context, LoginScreen.id);
+    }
+    Duration duration = endTime.difference(getCurrentTime());
+    sec = duration.inSeconds;
+  }
+
+  DateTime getCurrentTime() {
+    return DateTime.now();
   }
 
   Future getCount() async {
@@ -93,190 +119,39 @@ class _WaitScreenState extends State<WaitScreen> {
     });
   }
 
-  Future getEndTime() async {
+  Future getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser();
+      if (user != null) {
+        loggin = user;
+        print(loggin.email);
+        email = loggin.email;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future getList() async {
     var value;
-    await roomRef2.once().then((DataSnapshot dataSnapshot) {
+    roomRef = FirebaseDatabase.instance
+        .reference()
+        .child('roomList')
+        .child(id)
+        .child('list');
+    await roomRef.once().then((DataSnapshot dataSnapshot) {
       value = dataSnapshot.value;
-
-      String time = value.toString();
-      endTime = DateTime.parse(time);
-      print(endTime);
+      var userObjsJson = jsonDecode(value) as List;
+      userObjs = userObjsJson.map((tagJson) => User.fromJson(tagJson)).toList();
     });
-    //currentTime = DateTime.now();
   }
 
-  Widget upDate() {
-    var value;
-    var key;
-
-//    setState(() {
-//      getCurrentTime();
-//      //currentTime = DateTime.now();
-//    });
-    if (getCurrentTime().isAfter(endTimesubstract) &&
-        getCurrentTime().isBefore(endTimeplus)) {
-      if (count >= 5) {
-        print('loading');
-        Navigator.pushNamed(context, LoadingScreen.id);
-      } else {
-        Navigator.pushNamed(context, RoomScreen.id);
-      }
-    } else if (getCurrentTime().isBefore(endTime)) {
-      print('up');
-      print(getCurrentTime());
-      roomRef3.update(
-        {'currentTime': getCurrentTime().toString()},
-      );
-      return waiting();
-    } else {
-      //Navigator.pop(context);
-      Navigator.pushNamed(context, LoginScreen.id);
+  bool getHintType(index) {
+    if (index == 5) {
+      return true;
     }
-
-    return Container();
+    return false;
   }
-
-  Widget upDateNew() {
-    var value;
-    var key;
-
-//    setState(() {
-//      getCurrentTime();
-//      //currentTime = DateTime.now();
-//    });
-    if (getCurrentTime().isBefore(endTime)) {
-      print('up');
-      print(getCurrentTime());
-      roomRef3.update(
-        {'currentTime': getCurrentTime().toString()},
-      );
-      return waiting();
-    } else {
-      timerRunning = false;
-    }
-
-    return Container();
-  }
-
-  DateTime getCurrentTime() {
-    return DateTime.now();
-  }
-
-  Widget loading() {
-    return Column(
-      children: <Widget>[
-        FlatButton(
-          onPressed: () {},
-          child: Text(
-            'TIME STARTED ! SOON MOVING TO GAME SCREEN !',
-            style: kSendButtonTextStyle,
-          ),
-        ),
-        Center(
-          child: Countdown(
-            seconds: 10,
-            build: (_, timer) => Text(timer.toString()),
-            interval: Duration(
-              milliseconds: 100,
-            ),
-            onFinished: () {
-              print('Timer is done!');
-              Navigator.pushNamed(context, CommonScreen.id);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget waiting() {
-    return Column(
-      children: <Widget>[
-        FlatButton(
-          onPressed: () {},
-          child: Text(
-            'WAITING FOR OTHER MEMBERS TO JOIN',
-            style: kSendButtonTextStyle,
-          ),
-        ),
-        Center(
-          child: Text(getCurrentTime().toString()),
-        ),
-      ],
-    );
-  }
-
-  bool getTimeRunning() {
-    return timerRunning;
-  }
-
-  Widget getButton() {
-    setState(() {
-      getTimeRunning();
-    });
-    if (getCurrentTime().isAfter(endTime)) {
-      if (count >= 5) {
-        print('loading');
-        return FlatButton(
-          onPressed: () {
-            Navigator.pushNamed(context, LoadingScreen.id);
-          },
-          child: Text(
-            'TIME STARTED ! SOON MOVING TO GAME SCREEN !',
-            style: kSendButtonTextStyle,
-          ),
-        );
-      } else {
-        Navigator.pushNamed(context, LoginScreen.id);
-      }
-      return FlatButton();
-    } else {
-      return FlatButton(
-        child: Text(
-          'Waiting',
-          style: TextStyle(color: Colors.white),
-        ),
-        color: Colors.green,
-      );
-    }
-  }
-
-//  Widget textToDisplay() {
-//
-//    if (count >= 5) {
-//      return Column(
-//        children: <Widget>[
-//          FlatButton(
-//            onPressed: () {},
-//            child: Text(
-//              'TIME STARTED ! SOON MOVING TO GAME SCREEN !',
-//              style: kSendButtonTextStyle,
-//            ),
-//          ),
-//          Center(
-//            child: Countdown(
-//              seconds: 10,
-//              build: (_, timer) => Text(timer.toString()),
-//              interval: Duration(
-//                milliseconds: 100,
-//              ),
-//              onFinished: () {
-//                print('Timer is done!');
-//                Navigator.pushNamed(context, CommonScreen.id);
-//              },
-//            ),
-//          ),
-//        ],
-//      );
-//    } else {
-//      return FlatButton(
-//        child: Text(
-//          'WAITING FOR OTHER MEMBERS TO JOIN',
-//          style: kSendButtonTextStyle,
-//        ),
-//      );
-//    }
-//  }
 
   Widget finalUpdate() {
     int val = endTime.compareTo(getCurrentTime());
@@ -312,26 +187,44 @@ class _WaitScreenState extends State<WaitScreen> {
       appBar: AppBar(
         title: Text('MYSTERY GAME !!'),
       ),
-      body: finalUpdate(),
-//      body: Column(children: <Widget>[
-//        TimerBuilder.scheduled([currentTime, endTime], builder: (context) {
-//          return TimerBuilder.periodic(Duration(seconds: 1),
-//              builder: (context) {
-//            return upDateNew();
-//          });
-//        }),
-//        getButton(),
-//      ]),
+      body: Countdown(
+        seconds: sec,
+        build: (_, timer) => Text(timer.toString()),
+        interval: Duration(
+          milliseconds: 100,
+        ),
+        onFinished: () async {
+          print('Timer is done!');
+          Future a = await getCount();
+
+          if (count >= 5) {
+            Future a = await getList();
+            Future b = await getCurrentUser();
+            int index;
+            for (int i = 0; i < 5; i++) {
+              if (userObjs[i].email.trim() == email.trim()) {
+                index = i;
+                break;
+              }
+            }
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return HintScreen(
+                hintKey: index + 1,
+                hintType: getHintType(index + 1),
+                idd: id,
+              );
+            }));
+//            Navigator.push(context, MaterialPageRoute(builder: (context) {
+//              return CommonScreen(
+//                userList: userObjs,
+//                idd: id,
+//              );
+//            }));
+          } else {
+            Navigator.pushNamed(context, LoginScreen.id);
+          }
+        },
+      ),
     );
   }
-}
-
-String formatDuration(Duration d) {
-  String f(int n) {
-    return n.toString().padLeft(2, '0');
-  }
-
-  // We want to round up the remaining time to the nearest second
-  d += Duration(microseconds: 999999);
-  return "${f(d.inMinutes)}:${f(d.inSeconds % 60)}";
 }

@@ -10,19 +10,50 @@ import 'package:timer_count_down/timer_count_down.dart';
 import 'chat_screen.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'result_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'user.dart';
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flash_chat/screens/chat_screen.dart';
+import 'package:flash_chat/screens/common_screen.dart';
+import 'package:flash_chat/screens/fifth_screen.dart';
+import 'package:flash_chat/screens/join_screen.dart';
+import 'package:flash_chat/screens/login_screen.dart';
+import 'waiting_room.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flash_chat/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'count_perroom.dart';
+import 'back_end.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flash_chat/screens/waiting_room.dart';
+import 'user.dart';
+import 'package:flash_chat/screens/waiting_room.dart';
 
 class CommonScreen extends StatefulWidget {
   static const String id = 'common_screen';
+  final idd;
+  final userList;
+  CommonScreen({this.idd, this.userList});
 
   @override
   _CommonScreenState createState() => _CommonScreenState();
 }
 
 class _CommonScreenState extends State<CommonScreen> {
+  String id;
+  DatabaseReference roomRef3;
+  List<User> userObjs;
+
   @override
   void initState() {
     super.initState();
+    id = widget.idd;
+    userObjs = widget.userList;
   }
 
   Future<bool> _onBackPressed() {
@@ -53,6 +84,14 @@ class _CommonScreenState extends State<CommonScreen> {
       onWillPop: _onBackPressed,
       child: Scaffold(
         backgroundColor: Colors.white,
+        appBar: AppBar(actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.message),
+              onPressed: () {
+                Navigator.pushNamed(context, ChatScreen.id);
+                //Implement logout functionality
+              }),
+        ]),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
@@ -77,7 +116,12 @@ class _CommonScreenState extends State<CommonScreen> {
                           milliseconds: 100,
                         ),
                         onFinished: () {
-                          Navigator.pushNamed(context, ChatScreen.id);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ChatScreen(
+                              idd: id,
+                            );
+                          }));
                           print('50 s completete codkcedkior!');
                         },
                       ),
@@ -106,7 +150,7 @@ class _CommonScreenState extends State<CommonScreen> {
                     minWidth: 200.0,
                     height: 42.0,
                     child: Text(
-                      'CHARACTER 1',
+                      userObjs[0].email,
                     ),
                   ),
                 ),
@@ -132,7 +176,7 @@ class _CommonScreenState extends State<CommonScreen> {
                     minWidth: 200.0,
                     height: 42.0,
                     child: Text(
-                      'CHARACTER 2',
+                      userObjs[1].email,
                     ),
                   ),
                 ),
@@ -158,7 +202,7 @@ class _CommonScreenState extends State<CommonScreen> {
                     minWidth: 200.0,
                     height: 42.0,
                     child: Text(
-                      'CHARACTER 3',
+                      userObjs[2].email,
                     ),
                   ),
                 ),
@@ -184,7 +228,7 @@ class _CommonScreenState extends State<CommonScreen> {
                     minWidth: 200.0,
                     height: 42.0,
                     child: Text(
-                      'CHARACTER 4',
+                      userObjs[3].email,
                     ),
                   ),
                 ),
@@ -210,7 +254,7 @@ class _CommonScreenState extends State<CommonScreen> {
                     minWidth: 200.0,
                     height: 42.0,
                     child: Text(
-                      'CHARACTER 5',
+                      userObjs[4].email,
                     ),
                   ),
                 ),

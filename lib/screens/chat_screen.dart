@@ -6,11 +6,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'result_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:flash_chat/constants.dart';
 
 FirebaseUser loggin;
 
 class ChatScreen extends StatefulWidget {
   static const String id = 'chat_screen';
+  final idd;
+  ChatScreen({this.idd});
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -20,6 +25,13 @@ class _ChatScreenState extends State<ChatScreen> {
   final _firestore = Firestore.instance;
   String messagetext;
   final _auth = FirebaseAuth.instance;
+  DatabaseReference roomRef;
+  String idd;
+  String leader;
+  String currentMail;
+  bool gotMessage = false;
+  ProgressDialog pr;
+  String answer;
 
   void messagesStream() async {
     await for (var snapshot in _firestore.collection('messages').snapshots()) {
@@ -35,21 +47,57 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     print("hello");
     getCurrentUser();
+    idd = widget.idd;
+    pr = ProgressDialog(context);
+    pr = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
   }
 
-  void getCurrentUser() async {
+  Future showingProgress() async {
+    pr.style(
+        message: 'waiting...',
+        borderRadius: 10.0,
+        backgroundColor: Colors.white,
+        progressWidget: CircularProgressIndicator(),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+    await pr.show();
+  }
+
+  Future getCurrentUser() async {
     try {
       final user = await _auth.currentUser();
       if (user != null) {
         loggin = user;
         print(loggin.email);
+        currentMail = loggin.email;
       }
     } catch (e) {
       print(e);
     }
   }
 
-  createAlertDialog(BuildContext context) {
+  Future getLeader() async {
+    roomRef = FirebaseDatabase.instance
+        .reference()
+        .child('roomList')
+        .child(idd)
+        .child('leader');
+    var value;
+    await roomRef.once().then((DataSnapshot dataSnapshot) {
+      value = dataSnapshot.value;
+
+      leader = value.toString();
+    });
+  }
+
+  createAlertDialog(BuildContext context) async {
     TextEditingController customController = TextEditingController();
     return showDialog(
         context: context,
@@ -63,12 +111,12 @@ class _ChatScreenState extends State<ChatScreen> {
               MaterialButton(
                 elevation: 5.0,
                 child: Text('Submit'),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ResultScreen(
-                      userAnswer: customController.text.toString(),
-                    );
-                  }));
+                onPressed: () async {
+                  answer = customController.text.toString();
+                  setState(() {
+                    gotMessage = true;
+                    Navigator.pop(context);
+                  });
                 },
               ),
             ],
@@ -76,24 +124,51 @@ class _ChatScreenState extends State<ChatScreen> {
         });
   }
 
+  Widget hello() {
+    if (gotMessage == false) {
+      return Countdown(
+        seconds: 20,
+        build: (_, timer) => Text(timer.toString()),
+        interval: Duration(
+          milliseconds: 100,
+        ),
+        onFinished: () async {
+          //TODO: move to result screen
+          print('20 s completete codkcedkior!');
+          Future a = await getLeader();
+          Future b = await getCurrentUser();
+          leader = leader.trim();
+          currentMail = currentMail.trim();
+          print(leader);
+          print(currentMail);
+          print(currentMail == leader);
+          if (currentMail == leader) {
+            await createAlertDialog(context);
+          } else {
+            await showingProgress();
+          }
+        },
+      );
+    } else {
+      pr.hide();
+      return FlatButton(
+        child: Text('get Result', style: kMessageTextStyle),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return ResultScreen(
+              userAnswer: answer,
+            );
+          }));
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: FlatButton(
-          child: Countdown(
-            seconds: 20,
-            build: (_, timer) => Text(timer.toString()),
-            interval: Duration(
-              milliseconds: 100,
-            ),
-            onFinished: () {
-              //TODO: move to result screen
-              print('20 s completete codkcedkior!');
-              createAlertDialog(context);
-            },
-          ),
-        ),
+        leading: hello(),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.close),
@@ -129,8 +204,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   final messages = snapshot.data.documents.reversed;
                   List<MessageBubble> messageWidgets = [];
                   for (var message in messages) {
-                    final messageText = message.data['text'];
-                    final messagesender = message.data['sender'];
+                    final messageText = message.data['text'].toString();
+                    final messagesender = message.data['sender'].toString();
                     final currentUser = loggin.email;
                     final messagewidge = MessageBubble(
                       sender: messagesender,
@@ -173,7 +248,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       onPressed: () {
                         messageTextController.clear();
                         _firestore.collection('messages').add({
-                          'text': messagetext,
+                          'text': messagetext ?? '',
                           'sender': loggin.email,
                           'date': DateTime.now().toIso8601String().toString(),
                         });

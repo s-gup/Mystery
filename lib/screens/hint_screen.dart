@@ -12,9 +12,9 @@ import 'package:timer_count_down/timer_controller.dart';
 class HintScreen extends StatefulWidget {
   final hintKey;
   final hintType;
-  final keyList;
+  final idd;
 
-  HintScreen({this.hintKey, this.hintType, this.keyList});
+  HintScreen({this.hintKey, this.hintType, this.idd});
 
   @override
   _HintScreenState createState() => _HintScreenState();
@@ -27,18 +27,26 @@ class _HintScreenState extends State<HintScreen> {
   String commonMessage;
 
   String hintMessage;
-
+  String id;
+  bool type;
   @override
   void initState() {
     super.initState();
     key = widget.hintKey;
-    bool type = widget.hintType;
-
+    id = widget.idd;
+    type = widget.hintType;
+    print(key);
+    print(type);
+    print(id);
+    print(type == true);
     if (type == true) {
+      print('entered true');
       hintMessage = hintModel.getTrueHint(key);
     } else {
+      print('false en');
       hintMessage = hintModel.getFalseHint(key);
     }
+    print(hintMessage);
     commonMessage =
         'Mr X has been murdered !!!  You have to identify the killer out of five people . Click on this page to get the hint about the Character $key !! ';
   }
@@ -85,7 +93,22 @@ class _HintScreenState extends State<HintScreen> {
                       '$key : ',
                       style: kTempTextStyle,
                     ),
-//
+                    Countdown(
+                      seconds: 10,
+                      build: (_, timer) => Text(timer.toString()),
+                      interval: Duration(
+                        milliseconds: 100,
+                      ),
+                      onFinished: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ChatScreen(
+                            idd: id,
+                          );
+                        }));
+                        print('50 s completete codkcedkior!');
+                      },
+                    ),
                   ],
                 ),
               ),
