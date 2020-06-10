@@ -138,16 +138,17 @@ class _SemiFinalState extends State<SemiFinal> {
                 child: Text('Submit'),
                 onPressed: () async {
                   answer = customController.text.toString();
-                  setState(() {
-                    gotMessage = true;
-                  });
+                  Navigator.pop(context);
+//                  setState(() {
+//                    gotMessage = true;
+//                  });
 
-                  await Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                    return ResultScreen(
-                      userAnswer: answer,
-                    );
-                  }));
+//                  await Navigator.push(context,
+//                      MaterialPageRoute(builder: (context) {
+//                    return ResultScreen(
+//                      userAnswer: answer,
+//                    );
+//                  }));
                 },
               ),
             ],
@@ -175,8 +176,45 @@ class _SemiFinalState extends State<SemiFinal> {
     }
   }
 
+  Widget getAnswer() {
+    if (currentMail == leader) {
+      return Row(
+        children: <Widget>[
+          Countdown(
+              seconds: 10,
+              build: (_, timer) => Text(timer.toString()),
+              interval: Duration(
+                milliseconds: 100,
+              ),
+              onFinished: () async {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return ResultScreen(
+                    userAnswer: answer,
+                  );
+                }));
+              }),
+          createAlertDialog(context)
+        ],
+      );
+    } else {
+      return Countdown(
+          seconds: 10,
+          build: (_, timer) => Text(timer.toString()),
+          interval: Duration(
+            milliseconds: 100,
+          ),
+          onFinished: () async {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ResultScreen(
+                userAnswer: answer,
+              );
+            }));
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(child: getButton());
+    return getAnswer();
   }
 }

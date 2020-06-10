@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/semi_final.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
@@ -26,12 +27,14 @@ class _ChatScreenState extends State<ChatScreen> {
   String messagetext;
   final _auth = FirebaseAuth.instance;
   DatabaseReference roomRef;
+  DatabaseReference roomRef2;
+
   String idd;
   String leader;
   String currentMail;
   bool gotMessage = false;
   ProgressDialog pr;
-  String answer;
+  String answer = '';
 
   void messagesStream() async {
     await for (var snapshot in _firestore.collection('messages').snapshots()) {
@@ -51,6 +54,29 @@ class _ChatScreenState extends State<ChatScreen> {
     pr = ProgressDialog(context);
     pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
+  }
+
+  Future updateAnswer() async {
+    roomRef2 =
+        FirebaseDatabase.instance.reference().child('roomList').child(idd);
+    await roomRef2.update(
+      {'answer': answer},
+    );
+  }
+
+  Future getSavedAnswer() async {
+    roomRef = FirebaseDatabase.instance
+        .reference()
+        .child('roomList')
+        .child(idd)
+        .child('answer');
+    var value;
+    await roomRef.once().then((DataSnapshot dataSnapshot) {
+      value = dataSnapshot.value;
+
+      answer = value.toString();
+      print(answer);
+    });
   }
 
   Future showingProgress() async {
@@ -113,12 +139,57 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Text('Submit'),
                 onPressed: () async {
                   answer = customController.text.toString();
-                  setState(() {
-                    gotMessage = true;
-                    Navigator.pop(context);
-                  });
+                  Future a = await updateAnswer();
+                  //Navigator.pop(context);
+
+//                  setState(() {
+//                    gotMessage = true;
+//                    Navigator.pop(context);
+//                  });
                 },
               ),
+              Countdown(
+                  seconds: 10,
+                  build: (_, timer) => Text(timer.toString()),
+                  interval: Duration(
+                    milliseconds: 100,
+                  ),
+                  onFinished: () async {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ResultScreen(
+                        userAnswer: answer,
+                      );
+                    }));
+                  }),
+            ],
+          );
+        });
+  }
+
+  createWaitAlertDialog(BuildContext context) async {
+    //TextEditingController customController = TextEditingController();
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Waiting for leader to put answer"),
+            actions: <Widget>[
+              Countdown(
+                  seconds: 13,
+                  build: (_, timer) => Text(timer.toString()),
+                  interval: Duration(
+                    milliseconds: 100,
+                  ),
+                  onFinished: () async {
+                    Future a = await getSavedAnswer();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ResultScreen(
+                        userAnswer: answer,
+                      );
+                    }));
+                  }),
             ],
           );
         });
@@ -135,6 +206,7 @@ class _ChatScreenState extends State<ChatScreen> {
         onFinished: () async {
           //TODO: move to result screen
           print('20 s completete codkcedkior!');
+          Row();
           Future a = await getLeader();
           Future b = await getCurrentUser();
           leader = leader.trim();
@@ -164,11 +236,59 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  Widget getAnswer() {
+    return Countdown(
+        seconds: 20,
+        build: (_, timer) => Text(timer.toString()),
+        interval: Duration(
+          milliseconds: 100,
+        ),
+        onFinished: () async {
+          Future a = await getLeader();
+          Future b = await getCurrentUser();
+          leader = leader.trim();
+          currentMail = currentMail.trim();
+          if (currentMail == leader) {
+            await createAlertDialog(context);
+//            Countdown(
+//                seconds: 10,
+//                build: (_, timer) => Text(timer.toString()),
+//                interval: Duration(
+//                  milliseconds: 100,
+//                ),
+//                onFinished: () async {
+//                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+//                    return ResultScreen(
+//                      userAnswer: answer,
+//                    );
+//                  }));
+//                });
+
+          } else {
+            await createWaitAlertDialog(context);
+//            Countdown(
+//                seconds: 13,
+//                build: (_, timer) => Text(timer.toString()),
+//                interval: Duration(
+//                  milliseconds: 100,
+//                ),
+//                onFinished: () async {
+//                  Future a = await getSavedAnswer();
+//                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+//                    return ResultScreen(
+//                      userAnswer: answer,
+//                    );
+//                  }));
+//                });
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: hello(),
+        leading: getAnswer(),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.close),

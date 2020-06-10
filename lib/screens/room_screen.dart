@@ -89,6 +89,7 @@ class _RoomScreenState extends State<RoomScreen> {
       'endTime': twoMinutesFromNow.toString(),
       'list': jsonList,
       'leader': email.toString(),
+      'answer': '',
     });
 
     roomId = pushedRoomRef.key;
