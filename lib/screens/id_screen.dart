@@ -5,6 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+import 'package:flash_chat/constants.dart';
+
+import '../constants.dart';
+import '../constants.dart';
 
 FirebaseUser loggin;
 
@@ -29,7 +34,7 @@ class _IdScreenState extends State<IdScreen> {
   String roomId;
   String email;
   String endTime;
-
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   void initState() {
     // TODO: implement initState
@@ -43,45 +48,75 @@ class _IdScreenState extends State<IdScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.pinkAccent,
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                decoration: kMessageContainerDecoration,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: SelectableText(
-                        'YOUR ROOM ID IS: $roomId',
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return JoinScreen(email);
-                        }));
-                        //Implement send functionality.
-                      },
-                      child: Text(
-                        'JOIN ROOM',
-                        style: kSendButtonTextStyle,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+      appBar: AppBar(
+        title: Text('ROOM ID'),
+      ),
+      key: _scaffoldKey,
+      backgroundColor: Colors.blueAccent,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          //Center(child: Text(roomId)),
+//                    onLongPress: () {
+//                      Clipboard.setData(new ClipboardData(text: roomId));
+//                      key.currentState.showSnackBar(new SnackBar(
+//                        content: new Text("Copied to Clipboard"),
+//                      ));
+//                    },
+
+          Builder(
+            builder: (context) => RaisedButton.icon(
+              icon: Icon(Icons.content_copy),
+              onPressed: () {
+                Clipboard.setData(new ClipboardData(text: roomId));
+                Scaffold.of(context).showSnackBar(new SnackBar(
+                  content: Text(
+                    "Copied to Clipboard",
+                    style: kMessageTextStyle,
+                  ),
+                  duration: Duration(seconds: 2),
+                  backgroundColor: Colors.black26,
+                ));
+              },
+              label: Text(roomId),
+            ),
           ),
-        ),
+
+          Container(
+            decoration: kMessageContainerDecoration,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: SelectableText(
+                    'YOUR ROOM ID IS: $roomId',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return JoinScreen(email);
+                    }));
+                    //Implement send functionality.
+                  },
+                  child: Text(
+                    'JOIN ROOM',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

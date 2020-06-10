@@ -94,7 +94,7 @@ class _HintScreenState extends State<HintScreen> {
                       style: kTempTextStyle,
                     ),
                     Countdown(
-                      seconds: 10,
+                      seconds: 180,
                       build: (_, timer) => Text(timer.toString()),
                       interval: Duration(
                         milliseconds: 100,

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import '../constants.dart';
 import 'hint_screen.dart';
 import 'package:flash_chat/screens/loading_screen.dart';
 import 'package:flash_chat/screens/login_screen.dart';
@@ -187,43 +188,58 @@ class _WaitScreenState extends State<WaitScreen> {
       appBar: AppBar(
         title: Text('MYSTERY GAME !!'),
       ),
-      body: Countdown(
-        seconds: sec,
-        build: (_, timer) => Text(timer.toString()),
-        interval: Duration(
-          milliseconds: 100,
-        ),
-        onFinished: () async {
-          print('Timer is done!');
-          Future a = await getCount();
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: Icon(
+              Icons.alarm,
+              size: 100,
+            ),
+          ),
+          Countdown(
+            seconds: sec,
+            build: (_, timer) => Text(
+              timer.toString(),
+              style: kMessageTextStyle,
+            ),
+            interval: Duration(
+              milliseconds: 100,
+            ),
+            onFinished: () async {
+              print('Timer is done!');
+              Future a = await getCount();
 
-          if (count >= 5) {
-            Future a = await getList();
-            Future b = await getCurrentUser();
-            int index;
-            for (int i = 0; i < 5; i++) {
-              if (userObjs[i].email.trim() == email.trim()) {
-                index = i;
-                break;
-              }
-            }
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return HintScreen(
-                hintKey: index + 1,
-                hintType: getHintType(index + 1),
-                idd: id,
-              );
-            }));
+              if (count >= 5) {
+                Future a = await getList();
+                Future b = await getCurrentUser();
+                int index;
+                for (int i = 0; i < 5; i++) {
+                  if (userObjs[i].email.trim() == email.trim()) {
+                    index = i;
+                    break;
+                  }
+                }
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return HintScreen(
+                    hintKey: index + 1,
+                    hintType: getHintType(index + 1),
+                    idd: id,
+                  );
+                }));
 //            Navigator.push(context, MaterialPageRoute(builder: (context) {
 //              return CommonScreen(
 //                userList: userObjs,
 //                idd: id,
 //              );
 //            }));
-          } else {
-            Navigator.pushNamed(context, LoginScreen.id);
-          }
-        },
+              } else {
+                Navigator.pushNamed(context, LoginScreen.id);
+              }
+            },
+          ),
+        ],
       ),
     );
   }

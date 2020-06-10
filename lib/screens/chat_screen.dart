@@ -140,6 +140,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 onPressed: () async {
                   answer = customController.text.toString();
                   Future a = await updateAnswer();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ResultScreen(
+                      userAnswer: answer,
+                    );
+                  }));
                   //Navigator.pop(context);
 
 //                  setState(() {
@@ -149,7 +154,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 },
               ),
               Countdown(
-                  seconds: 10,
+                  seconds: 600,
                   build: (_, timer) => Text(timer.toString()),
                   interval: Duration(
                     milliseconds: 100,
