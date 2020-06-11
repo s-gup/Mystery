@@ -22,6 +22,7 @@ dependencies:
   flutter_timer: ^0.0.6
   firebase_messaging: ^6.0.16
   progress_dialog: ^1.2.4
+  getflutter: ^1.0.11
 
 
 

@@ -49,7 +49,7 @@ class _HintScreenState extends State<HintScreen> {
     }
     print(hintMessage);
     commonMessage =
-        'Mr X has been murdered !!!  You have to identify the killer out of five people . Click on this page to get the hint about the Character $key !! ';
+        'Mr X has been murdered !!!  You have to identify the killer out of five people . All the suspects know each other. Click on this page to get the hint about the Character $key !! ';
   }
 
   Future<bool> _onBackPressed() {

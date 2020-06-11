@@ -19,6 +19,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flash_chat/screens/waiting_room.dart';
 import 'user.dart';
 import 'package:flash_chat/screens/waiting_room.dart';
+import 'package:getflutter/getflutter.dart';
 
 class JoinScreen extends StatefulWidget {
   static const String id = 'join_screen';
@@ -176,7 +177,13 @@ class _JoinScreenState extends State<JoinScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.pinkAccent,
+        //color: Colors.pinkAccent,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/detect4.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SafeArea(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -202,18 +209,16 @@ class _JoinScreenState extends State<JoinScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                      borderSide: BorderSide(color: Colors.black, width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                      borderSide: BorderSide(color: Colors.black, width: 2.0),
                       borderRadius: BorderRadius.all(Radius.circular(32.0)),
                     ),
                   ),
                 ),
-                FlatButton(
+                GFButton(
                   onPressed: () async {
 //                      countRoom.incrementCount();
 //                      print(countRoom.getCount());
@@ -250,11 +255,15 @@ class _JoinScreenState extends State<JoinScreen> {
 
                     //Implement send functionality.
                   },
-                  child: Text(
-                    'MOVE TO WAIT ROOM',
-                    style: kSendButtonTextStyle,
-                  ),
-                ),
+                  icon: Icon(Icons.add_to_queue),
+                  text: 'Move to WAIT Room',
+                  shape: GFButtonShape.pills,
+                  size: GFSize.MEDIUM,
+                  //type: GFButtonType.outline2x,
+                  type: GFButtonType.solid,
+                  highlightColor: Colors.red,
+                  disabledColor: Colors.black54,
+                )
               ]),
         ),
       ),
