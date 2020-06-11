@@ -21,7 +21,7 @@ import 'loading_screen.dart';
 import 'package:flutter_timer/flutter_timer.dart';
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:screen/screen.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/screens/common_screen.dart';
 import 'package:flash_chat/screens/fifth_screen.dart';
@@ -67,6 +67,8 @@ class _WaitScreenState extends State<WaitScreen> {
   DateTime endTimesubstract;
   bool timerRunning;
   int sec;
+  bool _isKeptOn = false;
+  double _brightness = 1.0;
   DatabaseReference roomRef;
   List<User> userObjs;
   String email;
@@ -74,7 +76,7 @@ class _WaitScreenState extends State<WaitScreen> {
   @override
   void initState() {
     super.initState();
-
+    Screen.keepOn(true);
     var end = widget.endDay;
     String end1 = end.toString();
     print(end1);
@@ -107,6 +109,14 @@ class _WaitScreenState extends State<WaitScreen> {
     Duration duration = endTime.difference(getCurrentTime());
     //int millseconds = duration.inMicroseconds;
     sec = duration.inSeconds;
+  }
+  initPlatformState() async {
+    bool keptOn = await Screen.isKeptOn;
+    double brightness = await Screen.brightness;
+    setState((){
+      _isKeptOn = keptOn;
+      _brightness = brightness;
+    });
   }
 
   DateTime getCurrentTime() {

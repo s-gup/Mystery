@@ -14,7 +14,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'user.dart';
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:screen/screen.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/screens/common_screen.dart';
 import 'package:flash_chat/screens/fifth_screen.dart';
@@ -48,14 +48,23 @@ class _CommonScreenState extends State<CommonScreen> {
   String id;
   DatabaseReference roomRef3;
   List<User> userObjs;
-
+  bool _isKeptOn = false;
+  double _brightness = 1.0;
   @override
   void initState() {
     super.initState();
+    Screen.keepOn(true);
     id = widget.idd;
     userObjs = widget.userList;
   }
-
+  initPlatformState() async {
+    bool keptOn = await Screen.isKeptOn;
+    double brightness = await Screen.brightness;
+    setState((){
+      _isKeptOn = keptOn;
+      _brightness = brightness;
+    });
+  }
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
