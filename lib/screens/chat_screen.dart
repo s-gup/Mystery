@@ -10,6 +10,7 @@ import 'result_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:flash_chat/constants.dart';
+import 'package:flash_chat/screens/login_screen.dart';
 
 FirebaseUser loggin;
 
@@ -37,7 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
   String answer = '';
 
   void messagesStream() async {
-    await for (var snapshot in _firestore.collection('messages').snapshots()) {
+    await for (var snapshot in _firestore.collection(idd).snapshots()) {
       for (var message in snapshot.documents) {
         print(message.data);
       }
@@ -154,7 +155,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 },
               ),
               Countdown(
-                  seconds: 600,
+                  seconds: 15,
                   build: (_, timer) => Text(timer.toString()),
                   interval: Duration(
                     milliseconds: 100,
@@ -181,7 +182,7 @@ class _ChatScreenState extends State<ChatScreen> {
             title: Text("Waiting for leader to put answer"),
             actions: <Widget>[
               Countdown(
-                  seconds: 13,
+                  seconds: 20,
                   build: (_, timer) => Text(timer.toString()),
                   interval: Duration(
                     milliseconds: 100,
@@ -241,20 +242,44 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: Text("NO"),
+              ),
+              SizedBox(height: 16),
+              new GestureDetector(
+                onTap: () => Navigator.pushNamed(context, LoginScreen.id),
+                child: Text("YES"),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   Widget getAnswer() {
-    return Countdown(
-        seconds: 20,
-        build: (_, timer) => Text(timer.toString()),
-        interval: Duration(
-          milliseconds: 100,
-        ),
-        onFinished: () async {
-          Future a = await getLeader();
-          Future b = await getCurrentUser();
-          leader = leader.trim();
-          currentMail = currentMail.trim();
-          if (currentMail == leader) {
-            await createAlertDialog(context);
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Countdown(
+          seconds: 600,
+          build: (_, timer) => Text(timer.toString()),
+          interval: Duration(
+            milliseconds: 100,
+          ),
+          onFinished: () async {
+            Future a = await getLeader();
+            Future b = await getCurrentUser();
+            leader = leader.trim();
+            currentMail = currentMail.trim();
+            if (currentMail == leader) {
+              await createAlertDialog(context);
 //            Countdown(
 //                seconds: 10,
 //                build: (_, timer) => Text(timer.toString()),
@@ -269,8 +294,8 @@ class _ChatScreenState extends State<ChatScreen> {
 //                  }));
 //                });
 
-          } else {
-            await createWaitAlertDialog(context);
+            } else {
+              await createWaitAlertDialog(context);
 //            Countdown(
 //                seconds: 13,
 //                build: (_, timer) => Text(timer.toString()),
@@ -285,8 +310,9 @@ class _ChatScreenState extends State<ChatScreen> {
 //                    );
 //                  }));
 //                });
-          }
-        });
+            }
+          }),
+    );
   }
 
   @override
@@ -314,10 +340,7 @@ class _ChatScreenState extends State<ChatScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               StreamBuilder<QuerySnapshot>(
-                stream: _firestore
-                    .collection('messages')
-                    .orderBy('date')
-                    .snapshots(),
+                stream: _firestore.collection(idd).orderBy('date').snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
@@ -372,7 +395,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     FlatButton(
                       onPressed: () {
                         messageTextController.clear();
-                        _firestore.collection('messages').add({
+                        _firestore.collection(idd).add({
                           'text': messagetext ?? '',
                           'sender': loggin.email,
                           'date': DateTime.now().toIso8601String().toString(),

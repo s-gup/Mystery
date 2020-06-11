@@ -129,7 +129,7 @@ class _JoinScreenState extends State<JoinScreen> {
     print('countupdated$newCount');
   }
 
-  Future updateList() async {
+  Future oldList() async {
     var value;
 
     user = User(email, "1");
@@ -143,7 +143,6 @@ class _JoinScreenState extends State<JoinScreen> {
       value = dataSnapshot.value;
       var userObjsJson = jsonDecode(value) as List;
       userObjs = userObjsJson.map((tagJson) => User.fromJson(tagJson)).toList();
-      userObjs.add(user);
 
       //String stremail = email.toString();
 //      String stremail = "$email";
@@ -155,6 +154,7 @@ class _JoinScreenState extends State<JoinScreen> {
   }
 
   Future addToList() async {
+    userObjs.add(user);
     String changed = jsonEncode(userObjs);
     roomRef =
         FirebaseDatabase.instance.reference().child('roomList').child(idd);
@@ -217,22 +217,36 @@ class _JoinScreenState extends State<JoinScreen> {
                   onPressed: () async {
 //                      countRoom.incrementCount();
 //                      print(countRoom.getCount());
-
+                    bool emailFound = false;
                     Future a = await findOldCount();
-                    Future b = await updateCount();
-                    Future c = await updateList();
-                    Future d = await addToList();
-                    Future e = await getEndDate();
-                    print('endtime $endTime');
-                    //getEndDate();
-                    //Navigator.pushNamed(context, WaitScreen.id);
-                    await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return WaitScreen(
-                        idd: idd,
-                        endDay: endTime,
-                      );
-                    }));
+                    Future c = await oldList();
+                    for (int i = 0; i < oldCount; i++) {
+                      if (userObjs[i].email.trim() == email.trim()) {
+                        emailFound = true;
+                      }
+                    }
+                    if (oldCount >= 5) {
+                      print('room full');
+                    }
+                    if (emailFound == true) {
+                      print('already added');
+                    }
+                    if (oldCount < 5 && emailFound == false) {
+                      Future b = await updateCount();
+
+                      Future d = await addToList();
+                      Future e = await getEndDate();
+                      print('endtime $endTime');
+                      //getEndDate();
+                      //Navigator.pushNamed(context, WaitScreen.id);
+                      await Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return WaitScreen(
+                          idd: idd,
+                          endDay: endTime,
+                        );
+                      }));
+                    }
 
                     //Implement send functionality.
                   },

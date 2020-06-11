@@ -71,7 +71,7 @@ class _RoomScreenState extends State<RoomScreen> {
     today = new DateTime.now();
     startTime = today.toString();
     print(today);
-    twoMinutesFromNow = today.add(new Duration(minutes: 5));
+    twoMinutesFromNow = today.add(new Duration(minutes: 3));
     endTime = twoMinutesFromNow.toString();
     print(twoMinutesFromNow);
   }

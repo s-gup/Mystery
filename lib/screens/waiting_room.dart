@@ -103,6 +103,7 @@ class _WaitScreenState extends State<WaitScreen> {
       Navigator.pushNamed(context, LoginScreen.id);
     }
     Duration duration = endTime.difference(getCurrentTime());
+    //int millseconds = duration.inMicroseconds;
     sec = duration.inSeconds;
   }
 
@@ -154,92 +155,141 @@ class _WaitScreenState extends State<WaitScreen> {
     return false;
   }
 
-  Widget finalUpdate() {
-    int val = endTime.compareTo(getCurrentTime());
-    if (val > 0) {
-      Duration duration = endTime.difference(getCurrentTime());
-      int sec = duration.inSeconds;
-      return Center(
-        child: Countdown(
-          seconds: sec,
-          build: (_, timer) => Text(timer.toString()),
-          interval: Duration(
-            milliseconds: 100,
-          ),
-          onFinished: () async {
-            print('Timer is done!');
-            Future a = await getCount();
-            if (count >= 5) {
-              Navigator.pushNamed(context, CommonScreen.id);
-            } else {
-              Navigator.pushNamed(context, LoginScreen.id);
-            }
-          },
-        ),
-      );
-    } else {
-      Navigator.pushNamed(context, LoginScreen.id);
-      return FlatButton();
-    }
+  Future updateList() async {
+    String changed = jsonEncode(userObjs);
+    roomRef = FirebaseDatabase.instance.reference().child('roomList').child(id);
+    await roomRef.update(
+      {'list': changed},
+    );
+    print('listupdated$changed');
   }
 
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('MYSTERY GAME !!'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Center(
-            child: Icon(
-              Icons.alarm,
-              size: 100,
-            ),
-          ),
-          Countdown(
-            seconds: sec,
-            build: (_, timer) => Text(
-              timer.toString(),
-              style: kMessageTextStyle,
-            ),
-            interval: Duration(
-              milliseconds: 100,
-            ),
-            onFinished: () async {
-              print('Timer is done!');
-              Future a = await getCount();
-
-              if (count >= 5) {
-                Future a = await getList();
-                Future b = await getCurrentUser();
-                int index;
-                for (int i = 0; i < 5; i++) {
-                  if (userObjs[i].email.trim() == email.trim()) {
-                    index = i;
-                    break;
+  Future<bool> _onBackPressed() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: Text("NO"),
+              ),
+              SizedBox(height: 16),
+              new GestureDetector(
+                onTap: () async {
+                  Future a = await getList();
+                  Future b = await getCurrentUser();
+                  int i = 0;
+                  for (User u in userObjs) {
+                    print(u.email);
+                    if (u.email.trim() == email.trim()) {
+                      //userObjs.remove(u);
+                      userObjs.removeAt(i);
+                      Future c = await updateList();
+                      break;
+                    }
+                    i++;
                   }
-                }
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return HintScreen(
-                    hintKey: index + 1,
-                    hintType: getHintType(index + 1),
-                    idd: id,
-                  );
-                }));
+                  Navigator.pushNamed(context, LoginScreen.id);
+                },
+                child: Text("YES"),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
+//  Widget finalUpdate() {
+//    int val = endTime.compareTo(getCurrentTime());
+//    if (val > 0) {
+//      Duration duration = endTime.difference(getCurrentTime());
+//      int sec = duration.inSeconds;
+//      return Center(
+//        child: Countdown(
+//          seconds: sec,
+//          build: (_, timer) => Text(timer.toString()),
+//          interval: Duration(
+//            milliseconds: 100,
+//          ),
+//          onFinished: () async {
+//            print('Timer is done!');
+//            Future a = await getCount();
+//            if (count >= 1) {
+//              Navigator.pushNamed(context, CommonScreen.id);
+//            } else {
+//              Navigator.pushNamed(context, LoginScreen.id);
+//            }
+//          },
+//        ),
+//      );
+//    } else {
+//      Navigator.pushNamed(context, LoginScreen.id);
+//      return FlatButton();
+//    }
+//  }
+
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('MYSTERY GAME !!'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Icon(
+                Icons.alarm,
+                size: 100,
+              ),
+            ),
+            Countdown(
+              seconds: sec,
+              build: (_, timer) => Text(
+                timer.toString(),
+                style: kMessageTextStyle,
+              ),
+              interval: Duration(
+                milliseconds: 100,
+              ),
+              onFinished: () async {
+                print('Timer is done!');
+                Future a = await getCount();
+
+                if (count == 5) {
+                  Future a = await getList();
+                  Future b = await getCurrentUser();
+                  int index;
+                  for (int i = 0; i < 5; i++) {
+                    if (userObjs[i].email.trim() == email.trim()) {
+                      index = i;
+                      break;
+                    }
+                  }
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return HintScreen(
+                      hintKey: index + 1,
+                      hintType: getHintType(index + 1),
+                      idd: id,
+                    );
+                  }));
 //            Navigator.push(context, MaterialPageRoute(builder: (context) {
 //              return CommonScreen(
 //                userList: userObjs,
 //                idd: id,
 //              );
 //            }));
-              } else {
-                Navigator.pushNamed(context, LoginScreen.id);
-              }
-            },
-          ),
-        ],
+                } else {
+                  Navigator.pushNamed(context, LoginScreen.id);
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

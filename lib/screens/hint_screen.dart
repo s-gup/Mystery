@@ -6,7 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flipping_card/flipping_card.dart';
 import 'timer.dart';
 import 'package:timer_count_down/timer_count_down.dart';
-
+import 'package:flash_chat/screens/login_screen.dart';
 import 'package:timer_count_down/timer_controller.dart';
 
 class HintScreen extends StatefulWidget {
@@ -51,27 +51,51 @@ class _HintScreenState extends State<HintScreen> {
         'Mr X has been murdered !!!  You have to identify the killer out of five people . Click on this page to get the hint about the Character $key !! ';
   }
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: Text("NO"),
+              ),
+              SizedBox(height: 16),
+              new GestureDetector(
+                onTap: () => Navigator.pushNamed(context, LoginScreen.id),
+                child: Text("YES"),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/detect2.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.8), BlendMode.dstATop),
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/detect2.jpg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                  Colors.white.withOpacity(0.8), BlendMode.dstATop),
+            ),
           ),
-        ),
-        constraints: BoxConstraints.expand(),
-        child: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
+          constraints: BoxConstraints.expand(),
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
 //                  FlatButton(
 //                    onPressed: () {
 //                      Navigator.pushNamed(context, ChatScreen.id);
@@ -83,68 +107,69 @@ class _HintScreenState extends State<HintScreen> {
 //                  ),
 
 //
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '$key : ',
-                      style: kTempTextStyle,
-                    ),
-                    Countdown(
-                      seconds: 180,
-                      build: (_, timer) => Text(timer.toString()),
-                      interval: Duration(
-                        milliseconds: 100,
-                      ),
-                      onFinished: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ChatScreen(
-                            idd: id,
-                          );
-                        }));
-                        print('50 s completete codkcedkior!');
-                      },
-                    ),
                   ],
                 ),
-              ),
-              Expanded(
-                child: FlippingCard(
-                  frontChild: Container(
-                      width: 200,
-                      height: 450,
-                      color: Colors.transparent,
-                      child: Center(
-                        child: AutoSizeText(
-                          commonMessage,
-                          style: kMessageTextStyle,
+                Padding(
+                  padding: EdgeInsets.only(left: 15.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '$key : ',
+                        style: kTempTextStyle,
+                      ),
+                      Countdown(
+                        seconds: 120,
+                        build: (_, timer) => Text(timer.toString()),
+                        interval: Duration(
+                          milliseconds: 100,
                         ),
-                      )),
-                  backChild: Container(
-                      width: 200,
-                      height: 450,
-                      color: Colors.transparent,
-                      child: Center(
-                        child: AutoSizeText(
-                          hintMessage,
-                          style: kMessageTextStyle,
-                        ),
-                      )),
-                  side: _card1Side,
-                  onTap: (side) {
-                    setState(() {
-                      _card1Side = (side == CardSide.FrontSide)
-                          ? CardSide.BackSide
-                          : CardSide.FrontSide;
-                    });
-                  },
+                        onFinished: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ChatScreen(
+                              idd: id,
+                            );
+                          }));
+                          print('50 s completete codkcedkior!');
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: FlippingCard(
+                    frontChild: Container(
+                        width: 200,
+                        height: 450,
+                        color: Colors.transparent,
+                        child: Center(
+                          child: AutoSizeText(
+                            commonMessage,
+                            style: kMessageTextStyle,
+                          ),
+                        )),
+                    backChild: Container(
+                        width: 200,
+                        height: 450,
+                        color: Colors.transparent,
+                        child: Center(
+                          child: AutoSizeText(
+                            hintMessage,
+                            style: kMessageTextStyle,
+                          ),
+                        )),
+                    side: _card1Side,
+                    onTap: (side) {
+                      setState(() {
+                        _card1Side = (side == CardSide.FrontSide)
+                            ? CardSide.BackSide
+                            : CardSide.FrontSide;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

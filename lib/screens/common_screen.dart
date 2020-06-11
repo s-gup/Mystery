@@ -69,7 +69,7 @@ class _CommonScreenState extends State<CommonScreen> {
               ),
               SizedBox(height: 16),
               new GestureDetector(
-                onTap: () => Navigator.of(context).pop(true),
+                onTap: () => Navigator.pushNamed(context, LoginScreen.id),
                 child: Text("YES"),
               ),
             ],
