@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flash_chat/screens/login_screen.dart';
+import 'package:flutter/services.dart';
 
 class ResultScreen extends StatefulWidget {
   static const String id = 'result_screen';
@@ -52,7 +53,8 @@ class _ResultScreenState extends State<ResultScreen> {
               ),
               SizedBox(height: 16),
               new GestureDetector(
-                onTap: () => Navigator.pushNamed(context, LoginScreen.id),
+                onTap: () => SystemNavigator.pop(),
+                //Navigator.pushNamed(context, LoginScreen.id),
                 child: Text("YES"),
               ),
             ],

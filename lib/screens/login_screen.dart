@@ -5,6 +5,7 @@ import 'package:flash_chat/screens/room_screen.dart';
 import 'package:flash_chat/screens/third_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'room_screen.dart';
 import 'chat_screen.dart';
 
@@ -19,130 +20,156 @@ class _LoginScreenState extends State<LoginScreen> {
   String email;
   String password;
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: Text("NO"),
+              ),
+              SizedBox(height: 16),
+              new GestureDetector(
+                onTap: () => SystemNavigator.pop(),
+                //Navigator.pushNamed(context, LoginScreen.id),
+                child: Text("YES"),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Hero(
-              tag: 'logo',
-              child: Container(
-                height: 30.0,
-                child: Image.asset('images/logo.png'),
-              ),
-            ),
-            SizedBox(
-              height: 48.0,
-            ),
-            TextField(
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-              ),
-              onChanged: (value) {
-                //Do something with the user input.
-                email = value;
-              },
-              decoration: InputDecoration(
-                hintText: 'Enter your email',
-                hintStyle: TextStyle(
-                  color: Colors.black54,
-                ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Hero(
+                tag: 'logo',
+                child: Container(
+                  height: 30.0,
+                  child: Image.asset('images/logo.png'),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 8.0,
-            ),
-            TextField(
-              obscureText: true,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
+              SizedBox(
+                height: 48.0,
               ),
-              onChanged: (value) {
-                password = value;
-                //Do something with the user input.
-              },
-              decoration: InputDecoration(
-                hintText: 'Enter your password.',
-                hintStyle: TextStyle(
-                  color: Colors.black54,
+              TextField(
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
                 ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 24.0,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () async {
-                    try {
-                      final userd = (await _auth.signInWithEmailAndPassword(
-                              email: email.trim(), password: password))
-                          .user;
-                      if (userd != null) {
-                        myclass cl = myclass();
-                        cl.addinmap(_auth, email);
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return RoomScreen(email);
-                        }));
-                      }
-                    } catch (e) {
-                      print(e);
-                    }
-
-                    //Implement login functionality.
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Log In',
+                onChanged: (value) {
+                  //Do something with the user input.
+                  email = value;
+                },
+                decoration: InputDecoration(
+                  hintText: 'Enter your email',
+                  hintStyle: TextStyle(
+                    color: Colors.black54,
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: 8.0,
+              ),
+              TextField(
+                obscureText: true,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+                onChanged: (value) {
+                  password = value;
+                  //Do something with the user input.
+                },
+                decoration: InputDecoration(
+                  hintText: 'Enter your password.',
+                  hintStyle: TextStyle(
+                    color: Colors.black54,
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  color: Colors.lightBlueAccent,
+                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                  elevation: 5.0,
+                  child: MaterialButton(
+                    onPressed: () async {
+                      try {
+                        final userd = (await _auth.signInWithEmailAndPassword(
+                                email: email.trim(), password: password))
+                            .user;
+                        if (userd != null) {
+                          myclass cl = myclass();
+                          cl.addinmap(_auth, email);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return RoomScreen(email);
+                          }));
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
+
+                      //Implement login functionality.
+                    },
+                    minWidth: 200.0,
+                    height: 42.0,
+                    child: Text(
+                      'Log In',
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

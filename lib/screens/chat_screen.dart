@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'result_screen.dart';
@@ -255,7 +256,8 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               SizedBox(height: 16),
               new GestureDetector(
-                onTap: () => Navigator.pushNamed(context, LoginScreen.id),
+                onTap: () => SystemNavigator.pop(),
+                // Navigator.pushNamed(context, LoginScreen.id),
                 child: Text("YES"),
               ),
             ],

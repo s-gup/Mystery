@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'package:flutter/services.dart';
+
 import '../constants.dart';
 import 'hint_screen.dart';
 import 'package:flash_chat/screens/loading_screen.dart';
@@ -191,7 +193,8 @@ class _WaitScreenState extends State<WaitScreen> {
                     }
                     i++;
                   }
-                  Navigator.pushNamed(context, LoginScreen.id);
+                  SystemNavigator.pop();
+                  // Navigator.pushNamed(context, LoginScreen.id);
                 },
                 child: Text("YES"),
               ),

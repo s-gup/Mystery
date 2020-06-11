@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'chat_screen.dart';
 import 'hints.dart';
 import 'package:flash_chat/constants.dart';
@@ -64,7 +65,8 @@ class _HintScreenState extends State<HintScreen> {
               ),
               SizedBox(height: 16),
               new GestureDetector(
-                onTap: () => Navigator.pushNamed(context, LoginScreen.id),
+                onTap: () => SystemNavigator.pop(),
+                //Navigator.pushNamed(context, LoginScreen.id),
                 child: Text("YES"),
               ),
             ],
