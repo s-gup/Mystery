@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:screen/screen.dart';
+
+// Prevent screen from going into sleep mode:
 
 import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/screens/common_screen.dart';
@@ -30,6 +33,8 @@ class JoinScreen extends StatefulWidget {
 }
 
 class _JoinScreenState extends State<JoinScreen> {
+  bool _isKeptOn = false;
+  double _brightness = 1.0;
   final messageTextController = TextEditingController();
   final _firestore = Firestore.instance;
   String messagetext;
@@ -39,6 +44,8 @@ class _JoinScreenState extends State<JoinScreen> {
   String idd;
   static List<int> roomList = List();
   String email;
+
+
 
   DatabaseReference roomRef;
   DatabaseReference roomRef2;
@@ -57,11 +64,19 @@ class _JoinScreenState extends State<JoinScreen> {
 
     super.initState();
 
+    Screen.keepOn(true);
     var value;
     //setTime();
     email = widget.email.toString();
   }
-
+  initPlatformState() async {
+    bool keptOn = await Screen.isKeptOn;
+    double brightness = await Screen.brightness;
+    setState((){
+      _isKeptOn = keptOn;
+      _brightness = brightness;
+    });
+  }
   Future getEndDate() async {
     idd = id.trim();
     roomRef2 = FirebaseDatabase.instance

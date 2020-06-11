@@ -1,6 +1,7 @@
 import 'package:flash_chat/screens/semi_final.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:screen/screen.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,6 +28,8 @@ class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
   final _firestore = Firestore.instance;
   String messagetext;
+  bool _isKeptOn = false;
+  double _brightness = 1.0;
   final _auth = FirebaseAuth.instance;
   DatabaseReference roomRef;
   DatabaseReference roomRef2;
@@ -50,12 +53,21 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Screen.keepOn(true);
     print("hello");
     getCurrentUser();
     idd = widget.idd;
     pr = ProgressDialog(context);
     pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
+  }
+  initPlatformState() async {
+    bool keptOn = await Screen.isKeptOn;
+    double brightness = await Screen.brightness;
+    setState((){
+      _isKeptOn = keptOn;
+      _brightness = brightness;
+    });
   }
 
   Future updateAnswer() async {
