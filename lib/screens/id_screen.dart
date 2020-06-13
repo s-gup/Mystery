@@ -53,70 +53,80 @@ class _IdScreenState extends State<IdScreen> {
       ),
       key: _scaffoldKey,
       backgroundColor: Colors.blueAccent,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          //Center(child: Text(roomId)),
+      body: Container(
+//        decoration: BoxDecoration(
+//          image: DecorationImage(
+//            image: AssetImage('images/detect7.jpg'),
+//            fit: BoxFit.cover,
+//          ),
+//        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            //Center(child: Text(roomId)),
 //                    onLongPress: () {
 //                      Clipboard.setData(new ClipboardData(text: roomId));
 //                      key.currentState.showSnackBar(new SnackBar(
 //                        content: new Text("Copied to Clipboard"),
 //                      ));
 //                    },
-
-          Builder(
-            builder: (context) => RaisedButton.icon(
-              icon: Icon(Icons.content_copy),
-              onPressed: () {
-                Clipboard.setData(new ClipboardData(text: roomId));
-                Scaffold.of(context).showSnackBar(new SnackBar(
-                  content: Text(
-                    "Copied to Clipboard",
-                    style: kMessageTextStyle,
-                  ),
-                  duration: Duration(seconds: 2),
-                  backgroundColor: Colors.black26,
-                ));
-              },
-              label: Text(roomId),
+            SizedBox(
+              height: 3,
             ),
-          ),
-
-          Container(
-            decoration: kMessageContainerDecoration,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: SelectableText(
-                    'YOUR ROOM ID IS: $roomId',
-                    style: TextStyle(
-                      color: Colors.black,
+            Builder(
+              builder: (context) => RaisedButton.icon(
+                icon: Icon(Icons.content_copy),
+                onPressed: () {
+                  Clipboard.setData(new ClipboardData(text: roomId));
+                  Scaffold.of(context).showSnackBar(new SnackBar(
+                    content: Text(
+                      "Copied to Clipboard",
+                      style: kMessageTextStyle,
+                    ),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: Colors.black26,
+                  ));
+                },
+                label: Text(roomId),
+              ),
+            ),
+            SizedBox(height: 5),
+            Container(
+              decoration: kMessageContainerDecoration,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: SelectableText(
+                      'YOUR ROOM ID IS: $roomId',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return JoinScreen(email);
-                    }));
-                    //Implement send functionality.
-                  },
-                  child: Text(
-                    'JOIN ROOM',
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return JoinScreen(email);
+                      }));
+                      //Implement send functionality.
+                    },
+                    child: Text(
+                      'JOIN ROOM',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

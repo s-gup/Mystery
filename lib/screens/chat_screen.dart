@@ -24,7 +24,7 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   final messageTextController = TextEditingController();
   final _firestore = Firestore.instance;
   String messagetext;
@@ -53,6 +53,8 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     Screen.keepOn(true);
     print("hello");
     getCurrentUser();
@@ -61,10 +63,34 @@ class _ChatScreenState extends State<ChatScreen> {
     pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // user returned to our app
+    } else if (state == AppLifecycleState.inactive) {
+      print('inactive');
+      SystemNavigator.pop();
+      // app is inactive
+    } else if (state == AppLifecycleState.paused) {
+      print('paused');
+      SystemNavigator.pop();
+      // user is about quit our app temporally
+    } else if (state == AppLifecycleState.detached) {
+      // app suspended (not used in iOS)
+    }
+  }
+
   initPlatformState() async {
     bool keptOn = await Screen.isKeptOn;
     double brightness = await Screen.brightness;
-    setState((){
+    setState(() {
       _isKeptOn = keptOn;
       _brightness = brightness;
     });

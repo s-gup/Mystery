@@ -50,7 +50,7 @@ class WaitScreen extends StatefulWidget {
   _WaitScreenState createState() => _WaitScreenState();
 }
 
-class _WaitScreenState extends State<WaitScreen> {
+class _WaitScreenState extends State<WaitScreen> with WidgetsBindingObserver {
   Duration duration = Duration(
     minutes: 2,
   );
@@ -76,6 +76,7 @@ class _WaitScreenState extends State<WaitScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     Screen.keepOn(true);
     var end = widget.endDay;
     String end1 = end.toString();
@@ -110,10 +111,34 @@ class _WaitScreenState extends State<WaitScreen> {
     //int millseconds = duration.inMicroseconds;
     sec = duration.inSeconds;
   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // user returned to our app
+    } else if (state == AppLifecycleState.inactive) {
+      print('inactive');
+      SystemNavigator.pop();
+      // app is inactive
+    } else if (state == AppLifecycleState.paused) {
+      print('paused');
+      SystemNavigator.pop();
+      // user is about quit our app temporally
+    } else if (state == AppLifecycleState.detached) {
+      // app suspended (not used in iOS)
+    }
+  }
+
   initPlatformState() async {
     bool keptOn = await Screen.isKeptOn;
     double brightness = await Screen.brightness;
-    setState((){
+    setState(() {
       _isKeptOn = keptOn;
       _brightness = brightness;
     });
@@ -273,7 +298,7 @@ class _WaitScreenState extends State<WaitScreen> {
                 print('Timer is done!');
                 Future a = await getCount();
 
-                if (count == 5) {
+                if (count == 1) {
                   Future a = await getList();
                   Future b = await getCurrentUser();
                   int index;

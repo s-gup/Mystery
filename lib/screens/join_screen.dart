@@ -45,8 +45,7 @@ class _JoinScreenState extends State<JoinScreen> {
   String idd;
   static List<int> roomList = List();
   String email;
-
-
+  bool _isButtonDisabled = false;
 
   DatabaseReference roomRef;
   DatabaseReference roomRef2;
@@ -70,14 +69,16 @@ class _JoinScreenState extends State<JoinScreen> {
     //setTime();
     email = widget.email.toString();
   }
+
   initPlatformState() async {
     bool keptOn = await Screen.isKeptOn;
     double brightness = await Screen.brightness;
-    setState((){
+    setState(() {
       _isKeptOn = keptOn;
       _brightness = brightness;
     });
   }
+
   Future getEndDate() async {
     idd = id.trim();
     roomRef2 = FirebaseDatabase.instance
@@ -188,6 +189,43 @@ class _JoinScreenState extends State<JoinScreen> {
     print(twoMinutesFromNow);
   }
 
+  void joinToRoom() async {
+    if (_isButtonDisabled == false) {
+      print(_isButtonDisabled);
+      _isButtonDisabled = true;
+      print(_isButtonDisabled);
+      bool emailFound = false;
+      Future a = await findOldCount();
+      Future c = await oldList();
+      for (int i = 0; i < oldCount; i++) {
+        if (userObjs[i].email.trim() == email.trim()) {
+          emailFound = true;
+        }
+      }
+      if (oldCount >= 5) {
+        print('room full');
+      }
+      if (emailFound == true) {
+        print('already added');
+      }
+      if (oldCount < 5 && emailFound == false) {
+        Future b = await updateCount();
+
+        Future d = await addToList();
+        Future e = await getEndDate();
+        print('endtime $endTime');
+        //getEndDate();
+        //Navigator.pushNamed(context, WaitScreen.id);
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return WaitScreen(
+            idd: idd,
+            endDay: endTime,
+          );
+        }));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -234,42 +272,7 @@ class _JoinScreenState extends State<JoinScreen> {
                   ),
                 ),
                 GFButton(
-                  onPressed: () async {
-//                      countRoom.incrementCount();
-//                      print(countRoom.getCount());
-                    bool emailFound = false;
-                    Future a = await findOldCount();
-                    Future c = await oldList();
-                    for (int i = 0; i < oldCount; i++) {
-                      if (userObjs[i].email.trim() == email.trim()) {
-                        emailFound = true;
-                      }
-                    }
-                    if (oldCount >= 5) {
-                      print('room full');
-                    }
-                    if (emailFound == true) {
-                      print('already added');
-                    }
-                    if (oldCount < 5 && emailFound == false) {
-                      Future b = await updateCount();
-
-                      Future d = await addToList();
-                      Future e = await getEndDate();
-                      print('endtime $endTime');
-                      //getEndDate();
-                      //Navigator.pushNamed(context, WaitScreen.id);
-                      await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return WaitScreen(
-                          idd: idd,
-                          endDay: endTime,
-                        );
-                      }));
-                    }
-
-                    //Implement send functionality.
-                  },
+                  onPressed: _isButtonDisabled ? null : () => joinToRoom(),
                   icon: Icon(Icons.add_to_queue),
                   text: 'Move to WAIT Room',
                   shape: GFButtonShape.pills,

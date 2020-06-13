@@ -21,7 +21,7 @@ class HintScreen extends StatefulWidget {
   _HintScreenState createState() => _HintScreenState();
 }
 
-class _HintScreenState extends State<HintScreen> {
+class _HintScreenState extends State<HintScreen> with WidgetsBindingObserver {
   int key;
   HintModel hintModel = HintModel();
   CardSide _card1Side = CardSide.FrontSide;
@@ -33,6 +33,7 @@ class _HintScreenState extends State<HintScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     key = widget.hintKey;
     id = widget.idd;
     type = widget.hintType;
@@ -50,6 +51,29 @@ class _HintScreenState extends State<HintScreen> {
     print(hintMessage);
     commonMessage =
         'Mr X has been murdered !!!  You have to identify the killer out of five people . All the suspects know each other. Click on this page to get the hint about the Character $key !! ';
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // user returned to our app
+    } else if (state == AppLifecycleState.inactive) {
+      print('inactive');
+      SystemNavigator.pop();
+      // app is inactive
+    } else if (state == AppLifecycleState.paused) {
+      print('paused');
+      SystemNavigator.pop();
+      // user is about quit our app temporally
+    } else if (state == AppLifecycleState.detached) {
+      // app suspended (not used in iOS)
+    }
   }
 
   Future<bool> _onBackPressed() {

@@ -15,6 +15,7 @@ import 'login_screen.dart';
 import 'registration_screen.dart';
 import 'back_end.dart';
 import 'join_screen.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class RoomScreen extends StatefulWidget {
   static const String id = 'room_screen';
@@ -91,6 +92,8 @@ class _RoomScreenState extends State<RoomScreen> {
       'list': jsonList,
       'leader': email.toString(),
       'answer': '',
+      'theme': '',
+      'total': 0,
     });
 
     roomId = pushedRoomRef.key;
