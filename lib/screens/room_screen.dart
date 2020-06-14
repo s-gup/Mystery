@@ -16,6 +16,7 @@ import 'registration_screen.dart';
 import 'back_end.dart';
 import 'join_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'choice_screen.dart';
 
 class RoomScreen extends StatefulWidget {
   static const String id = 'room_screen';
@@ -93,7 +94,10 @@ class _RoomScreenState extends State<RoomScreen> {
       'leader': email.toString(),
       'answer': '',
       'theme': '',
-      'total': 0,
+      'total': '0',
+      'set': '1',
+      'actualAns': '',
+      'hints': jsonList,
     });
 
     roomId = pushedRoomRef.key;
@@ -128,11 +132,18 @@ class _RoomScreenState extends State<RoomScreen> {
                     onPressed: () async {
                       String id = await createNewRoom();
 
+//                      Navigator.push(context,
+//                          MaterialPageRoute(builder: (context) {
+//                        return IdScreen(roomId: id, email: email);
+//                      }));
+                      //Go to login screen.
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return IdScreen(roomId: id, email: email);
+                        return ChoiceScreen(
+                          id: id,
+                          email: email,
+                        );
                       }));
-                      //Go to login screen.
                     },
                     minWidth: 200.0,
                     height: 42.0,
