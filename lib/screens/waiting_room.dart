@@ -60,6 +60,8 @@ class _WaitScreenState extends State<WaitScreen> with WidgetsBindingObserver {
   DatabaseReference roomRef2;
   DatabaseReference roomRef3;
   DatabaseReference roomRef4;
+  DatabaseReference roomRef5;
+
   DateTime currentTime;
   DateTime timer;
   DateTime endTime;
@@ -72,6 +74,9 @@ class _WaitScreenState extends State<WaitScreen> with WidgetsBindingObserver {
   DatabaseReference roomRef;
   List<User> userObjs;
   String email;
+  List<dynamic> hints;
+  String commonMessage;
+  int total;
   final _auth = FirebaseAuth.instance;
   @override
   void initState() {
@@ -96,16 +101,12 @@ class _WaitScreenState extends State<WaitScreen> with WidgetsBindingObserver {
         .child('roomList')
         .child(id)
         .child('currentTime');
-    roomRef4 = FirebaseDatabase.instance
-        .reference()
-        .child('roomList')
-        .child(id)
-        .child('count');
+
     roomRef3 =
         FirebaseDatabase.instance.reference().child('roomList').child(id);
     int val = endTime.compareTo(getCurrentTime());
     if (val < 0) {
-      Navigator.pushNamed(context, LoginScreen.id);
+      SystemNavigator.pop();
     }
     Duration duration = endTime.difference(getCurrentTime());
     //int millseconds = duration.inMicroseconds;
@@ -149,12 +150,32 @@ class _WaitScreenState extends State<WaitScreen> with WidgetsBindingObserver {
   }
 
   Future getCount() async {
+    roomRef4 = FirebaseDatabase.instance
+        .reference()
+        .child('roomList')
+        .child(id)
+        .child('count');
     var value;
     await roomRef4.once().then((DataSnapshot dataSnapshot) {
       value = dataSnapshot.value;
 
       String counts = value.toString();
       count = int.parse(counts);
+    });
+  }
+
+  Future getTotal() async {
+    roomRef4 = FirebaseDatabase.instance
+        .reference()
+        .child('roomList')
+        .child(id)
+        .child('total');
+    var value;
+    await roomRef4.once().then((DataSnapshot dataSnapshot) {
+      value = dataSnapshot.value;
+
+      String counts = value.toString();
+      total = int.parse(counts);
     });
   }
 
@@ -182,6 +203,34 @@ class _WaitScreenState extends State<WaitScreen> with WidgetsBindingObserver {
       value = dataSnapshot.value;
       var userObjsJson = jsonDecode(value) as List;
       userObjs = userObjsJson.map((tagJson) => User.fromJson(tagJson)).toList();
+    });
+  }
+
+  Future getHints() async {
+    var value;
+    roomRef5 = FirebaseDatabase.instance
+        .reference()
+        .child('roomList')
+        .child(id)
+        .child('hints');
+    await roomRef5.once().then((DataSnapshot dataSnapshot) {
+      value = dataSnapshot.value;
+      hints = jsonDecode(value) as List;
+      //userObjs = userObjsJson.map((tagJson) => User.fromJson(tagJson)).toList();
+    });
+  }
+
+  Future getCommonMesage() async {
+    var value;
+    roomRef5 = FirebaseDatabase.instance
+        .reference()
+        .child('roomList')
+        .child(id)
+        .child('common');
+    await roomRef5.once().then((DataSnapshot dataSnapshot) {
+      value = dataSnapshot.value;
+
+      commonMessage = value.toString();
     });
   }
 
@@ -297,10 +346,13 @@ class _WaitScreenState extends State<WaitScreen> with WidgetsBindingObserver {
               onFinished: () async {
                 print('Timer is done!');
                 Future a = await getCount();
-
-                if (count == 1) {
+                Future b = await getTotal();
+                if (count == total) {
                   Future a = await getList();
                   Future b = await getCurrentUser();
+                  Future c = await getHints();
+                  Future d = await getCommonMesage();
+                  print(hints);
                   int index;
                   for (int i = 0; i < 5; i++) {
                     if (userObjs[i].email.trim() == email.trim()) {
@@ -311,8 +363,9 @@ class _WaitScreenState extends State<WaitScreen> with WidgetsBindingObserver {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return HintScreen(
                       hintKey: index + 1,
-                      hintType: getHintType(index + 1),
                       idd: id,
+                      message: hints[index].toString(),
+                      commonMessage: commonMessage,
                     );
                   }));
 //            Navigator.push(context, MaterialPageRoute(builder: (context) {

@@ -51,7 +51,7 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
   Future updateTotal() async {
     roomRef = FirebaseDatabase.instance.reference().child('roomList').child(id);
     await roomRef.update(
-      {'total': total},
+      {'total': total.trim()},
     );
     print('totalpart$total');
   }

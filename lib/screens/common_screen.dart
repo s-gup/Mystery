@@ -57,14 +57,16 @@ class _CommonScreenState extends State<CommonScreen> {
     id = widget.idd;
     userObjs = widget.userList;
   }
+
   initPlatformState() async {
     bool keptOn = await Screen.isKeptOn;
     double brightness = await Screen.brightness;
-    setState((){
+    setState(() {
       _isKeptOn = keptOn;
       _brightness = brightness;
     });
   }
+
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
@@ -152,7 +154,7 @@ class _CommonScreenState extends State<CommonScreen> {
                           MaterialPageRoute(builder: (context) {
                         return HintScreen(
                           hintKey: 1,
-                          hintType: true,
+                          //hintType: true,
                         );
                       }));
                     },
@@ -178,7 +180,7 @@ class _CommonScreenState extends State<CommonScreen> {
                           MaterialPageRoute(builder: (context) {
                         return HintScreen(
                           hintKey: 2,
-                          hintType: true,
+                          //hintType: true,
                         );
                       }));
                     },
@@ -204,7 +206,7 @@ class _CommonScreenState extends State<CommonScreen> {
                           MaterialPageRoute(builder: (context) {
                         return HintScreen(
                           hintKey: 3,
-                          hintType: true,
+                          //hintType: true,
                         );
                       }));
                     },
@@ -230,7 +232,7 @@ class _CommonScreenState extends State<CommonScreen> {
                           MaterialPageRoute(builder: (context) {
                         return HintScreen(
                           hintKey: 4,
-                          hintType: true,
+                          //hintType: true,
                         );
                       }));
                     },
@@ -256,7 +258,7 @@ class _CommonScreenState extends State<CommonScreen> {
                           MaterialPageRoute(builder: (context) {
                         return HintScreen(
                           hintKey: 5,
-                          hintType: false,
+                          //hintType: false,
                         );
                       }));
                     },

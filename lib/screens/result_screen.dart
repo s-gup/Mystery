@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 class ResultScreen extends StatefulWidget {
   static const String id = 'result_screen';
   final userAnswer;
-  ResultScreen({this.userAnswer});
+  final actualAnswer;
+  ResultScreen({this.userAnswer, this.actualAnswer});
 
   @override
   _ResultScreenState createState() => _ResultScreenState();
@@ -13,15 +14,17 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   String answer;
+  String actualAnswer;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     answer = widget.userAnswer;
+    actualAnswer = widget.actualAnswer;
   }
 
   Widget getAnswer() {
-    if (answer == '5') {
+    if (answer == actualAnswer) {
       return Center(
         child: Icon(
           Icons.check,

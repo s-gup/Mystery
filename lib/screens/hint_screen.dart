@@ -12,10 +12,11 @@ import 'package:timer_count_down/timer_controller.dart';
 
 class HintScreen extends StatefulWidget {
   final hintKey;
-  final hintType;
+  final message;
   final idd;
+  final commonMessage;
 
-  HintScreen({this.hintKey, this.hintType, this.idd});
+  HintScreen({this.idd, this.message, this.commonMessage, this.hintKey});
 
   @override
   _HintScreenState createState() => _HintScreenState();
@@ -29,28 +30,31 @@ class _HintScreenState extends State<HintScreen> with WidgetsBindingObserver {
 
   String hintMessage;
   String id;
-  bool type;
+  //bool type;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     key = widget.hintKey;
     id = widget.idd;
-    type = widget.hintType;
+    //type = widget.hintType;
     print(key);
-    print(type);
+    //print(type);
     print(id);
-    print(type == true);
-    if (type == true) {
-      print('entered true');
-      hintMessage = hintModel.getTrueHint(key);
-    } else {
-      print('false en');
-      hintMessage = hintModel.getFalseHint(key);
-    }
-    print(hintMessage);
-    commonMessage =
-        'Mr X has been murdered !!!  You have to identify the killer out of five people . All the suspects know each other. Click on this page to get the hint about the Character $key !! ';
+    //print(type == true);
+//    if (type == true) {
+//      print('entered true');
+//      hintMessage = hintModel.getTrueHint(key);
+//    } else {
+//      print('false en');
+//      hintMessage = hintModel.getFalseHint(key);
+//    }
+//    print(hintMessage);
+    hintMessage = widget.message.toString();
+
+    /*commonMessage =
+        'Mr X has been murdered !!!  You have to identify the killer out of five people . All the suspects know each other. Click on this page to get the hint about the Character $key !! ';*/
+    commonMessage = widget.commonMessage.toString();
   }
 
   @override

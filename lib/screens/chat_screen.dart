@@ -40,7 +40,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   bool gotMessage = false;
   ProgressDialog pr;
   String answer = '';
-
+  String actualAns = '';
   void messagesStream() async {
     await for (var snapshot in _firestore.collection(idd).snapshots()) {
       for (var message in snapshot.documents) {
@@ -114,7 +114,22 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     await roomRef.once().then((DataSnapshot dataSnapshot) {
       value = dataSnapshot.value;
 
-      answer = value.toString();
+      answer = value.toString().trim();
+      print(answer);
+    });
+  }
+
+  Future getActualAnswer() async {
+    roomRef = FirebaseDatabase.instance
+        .reference()
+        .child('roomList')
+        .child(idd)
+        .child('actualAns');
+    var value;
+    await roomRef.once().then((DataSnapshot dataSnapshot) {
+      value = dataSnapshot.value;
+
+      actualAns = value.toString().trim();
       print(answer);
     });
   }
@@ -183,6 +198,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return ResultScreen(
                       userAnswer: answer,
+                      actualAnswer: actualAns,
                     );
                   }));
                   //Navigator.pop(context);
@@ -204,6 +220,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                         MaterialPageRoute(builder: (context) {
                       return ResultScreen(
                         userAnswer: answer,
+                        actualAnswer: actualAns,
                       );
                     }));
                   }),
@@ -232,6 +249,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                         MaterialPageRoute(builder: (context) {
                       return ResultScreen(
                         userAnswer: answer,
+                        actualAnswer: actualAns,
                       );
                     }));
                   }),
@@ -316,6 +334,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           onFinished: () async {
             Future a = await getLeader();
             Future b = await getCurrentUser();
+            Future c = await getActualAnswer();
             leader = leader.trim();
             currentMail = currentMail.trim();
             if (currentMail == leader) {

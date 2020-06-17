@@ -40,8 +40,9 @@ class _ThemeScreenState extends State<ThemeScreen> {
   String total;
   String id;
   int player;
-  List<String> hints = List();
+  List<String> hints;
   String ansq;
+  String commonMessage;
 
   final _firestore = Firestore.instance;
 
@@ -56,6 +57,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
     id = widget.id.toString();
     total = widget.total;
     player = int.parse(total);
+    hints = List();
   }
 
   Future hintsStream() async {
@@ -67,9 +69,9 @@ class _ThemeScreenState extends State<ThemeScreen> {
               in _firestore.collection(message.data['fun3']).snapshots()) {
             for (var m in snapshot2.documents) {
               if (m.documentID == set.toString()) {
-                for (int i = 1; i < set; i++) {
-                  hints.add(m.data[i]);
-                  ansq = m.data['ans'];
+                for (int i = 1; i < 3; i++) {
+                  hints.add(m.data[i.toString().trim()].toString());
+                  ansq = m.data['ans'].toString().trim();
                   print(hints);
                 }
               }
@@ -96,16 +98,25 @@ class _ThemeScreenState extends State<ThemeScreen> {
 //        print(message.data);
 //      }
 //    });
-    await for (var snapshot in _firestore.collection('fun3').snapshots()) {
+    await for (var snapshot
+        in _firestore.collection('$selectedCard$total').snapshots()) {
       for (var message in snapshot.documents) {
-        if (message.documentID.toString().trim() == '1') {
-          for (int i = 1; i < set; i++) {
-            hints.add(message.data[i]);
-            ansq = message.data['ans'];
+        if (message.documentID.toString().trim() == set.toString()) {
+          for (int i = 1; i <= int.parse(total); i++) {
+            hints.add(message.data[i.toString()].toString());
+            print(message.data[i.toString()]);
+            print(hints);
+            ansq = message.data['ans'].toString().trim();
+            commonMessage = message.data['common'].toString().trim();
           }
+          Future a = await addToHintList();
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return IdScreen(roomId: id, email: email);
+          }));
         }
       }
     }
+    print(hints);
   }
 
   Future updateThemeSet() async {
@@ -117,10 +128,17 @@ class _ThemeScreenState extends State<ThemeScreen> {
   }
 
   Future addToHintList() async {
+    print('hello');
     String changed = jsonEncode(hints);
     roomRef = FirebaseDatabase.instance.reference().child('roomList').child(id);
     await roomRef.update(
-      {'list': changed, 'actualAns': ansq},
+      {
+        'hints': changed,
+        'actualAns': ansq,
+        'theme': selectedCard,
+        'set': set.toString(),
+        'common': commonMessage,
+      },
     );
     print('listupdated$changed');
   }
@@ -129,132 +147,127 @@ class _ThemeScreenState extends State<ThemeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('BMI CALCULATOR'),
+          title: Text('SELECT THEME'),
         ),
-        body: Container(
-          margin: EdgeInsets.fromLTRB(0, 40, 0, 30),
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            // padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+//              mainAxisSize: MainAxisSize.min,
+//              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Expanded(
+                child: Row(
               children: <Widget>[
                 Expanded(
-                    child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: ReusableCard(
-                        onPress: () {
-                          setState(() {
-                            selectedCard = 'logic';
-                          });
-                        },
-                        colour: selectedCard == 'logic'
-                            ? kActiveCardColor
-                            : kInactiveCardColor,
-                        cardChild: IconContents(
-                          icon: FontAwesomeIcons.mars,
-                          label: 'LOGIC',
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ReusableCard(
-                        onPress: () {
-                          setState(() {
-                            selectedCard = 'fun';
-                          });
-                        },
-                        colour: selectedCard == 'fun'
-                            ? kActiveCardColor
-                            : kInactiveCardColor,
-                        cardChild: IconContents(
-                          icon: FontAwesomeIcons.venus,
-                          label: 'FUN',
-                        ),
-                      ),
-                    )
-                  ],
-                )),
-                Expanded(
                   child: ReusableCard(
-                    colour: kActiveCardColor,
-                    cardChild: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'NUMBER',
-                          style: kLabelTestStyle,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: <Widget>[
-                            Text(
-                              set.toString(),
-                              style: kNumberTextStyle,
-                            ),
-                          ],
-                        ),
-                        SliderTheme(
-                          data: SliderTheme.of(context).copyWith(
-                            inactiveTrackColor: Color(0xFF8D8E98),
-                            thumbColor: Color(0xFFEB1555),
-                            activeTrackColor: Colors.white,
-                            overlayColor: Color(0x29EB1555),
-                            thumbShape:
-                                RoundSliderThumbShape(enabledThumbRadius: 15.0),
-                            overlayShape:
-                                RoundSliderOverlayShape(overlayRadius: 30.0),
-                          ),
-                          child: Slider(
-                            value: set.toDouble(),
-                            min: 0.0,
-                            max: 100.0,
-                            onChanged: (double newValue) {
-                              setState(() {
-                                set = newValue.round();
-                              });
-                            },
-                          ),
-                        ),
-                      ],
+                    onPress: () {
+                      setState(() {
+                        selectedCard = 'logic';
+                      });
+                    },
+                    colour: selectedCard == 'logic'
+                        ? kActiveCardColor
+                        : kInactiveCardColor,
+                    cardChild: IconContents(
+                      icon: FontAwesomeIcons.mars,
+                      label: 'LOGIC',
                     ),
                   ),
                 ),
                 Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      Future a = await updateThemeSet();
-                      Future b = await hello();
-                      Future c = await addToHintList();
-                      Future d = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return IdScreen(roomId: id, email: email);
-                      }));
-                      //Go to login screen.
+                  child: ReusableCard(
+                    onPress: () {
+                      setState(() {
+                        selectedCard = 'fun';
+                      });
                     },
-                    child: Container(
-                      child: Center(
-                        child: Text(
-                          'SUBMIT',
-                          style: kLargeButtonTextStyle,
-                        ),
-                      ),
-                      width: double.infinity,
-                      height: kBottomContainerHeight,
-                      color: kBottomContainerColor,
-                      margin: EdgeInsets.only(top: 10.0),
-                      padding: EdgeInsets.only(bottom: 20.0),
+                    colour: selectedCard == 'fun'
+                        ? kActiveCardColor
+                        : kInactiveCardColor,
+                    cardChild: IconContents(
+                      icon: FontAwesomeIcons.venus,
+                      label: 'FUN',
                     ),
                   ),
                 )
               ],
+            )),
+            Expanded(
+              child: ReusableCard(
+                colour: kActiveCardColor,
+                cardChild: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'NUMBER',
+                        style: kLabelTestStyle,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: <Widget>[
+                          Text(
+                            set.toString(),
+                            style: kNumberTextStyle,
+                          ),
+                        ],
+                      ),
+                      SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          inactiveTrackColor: Color(0xFF8D8E98),
+                          thumbColor: Color(0xFFEB1555),
+                          activeTrackColor: Colors.white,
+                          overlayColor: Color(0x29EB1555),
+                          thumbShape:
+                              RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                          overlayShape:
+                              RoundSliderOverlayShape(overlayRadius: 30.0),
+                        ),
+                        child: Slider(
+                          value: set.toDouble(),
+                          min: 1.0,
+                          max: 100.0,
+                          onChanged: (double newValue) {
+                            setState(() {
+                              set = newValue.round();
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () async {
+                  //Future a = await updateThemeSet();
+                  Future b = await hello();
+                  //Future c = await addToHintList();
+//                  await Navigator.push(context,
+//                      MaterialPageRoute(builder: (context) {
+//                    return IdScreen(roomId: id, email: email);
+//                  }));
+                  //Go to login screen.
+                },
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      'SUBMIT',
+                      style: kLargeButtonTextStyle,
+                    ),
+                  ),
+                  width: double.infinity,
+                  height: kBottomContainerHeight,
+                  color: kBottomContainerColor,
+                  margin: EdgeInsets.only(top: 10.0),
+                  padding: EdgeInsets.only(bottom: 20.0),
+                ),
+              ),
+            )
+          ],
         ));
   }
 }

@@ -98,6 +98,7 @@ class _RoomScreenState extends State<RoomScreen> {
       'set': '1',
       'actualAns': '',
       'hints': jsonList,
+      'common': '',
     });
 
     roomId = pushedRoomRef.key;

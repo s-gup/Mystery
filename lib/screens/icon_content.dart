@@ -7,8 +7,7 @@ class IconContents extends StatelessWidget {
   final String label;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return SingleChildScrollView(
       child: Column(
         children: <Widget>[
           Icon(
