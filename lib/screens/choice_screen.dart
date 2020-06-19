@@ -20,6 +20,7 @@ import 'user.dart';
 import 'package:flash_chat/screens/waiting_room.dart';
 import 'package:getflutter/getflutter.dart';
 import 'theme_screen.dart';
+import 'package:dropdownfield/dropdownfield.dart';
 
 class ChoiceScreen extends StatefulWidget {
   final email;
@@ -32,8 +33,15 @@ class ChoiceScreen extends StatefulWidget {
 class _ChoiceScreenState extends State<ChoiceScreen> {
   String email;
   DatabaseReference roomRef;
-  String total;
+  String total = '3';
   String id;
+//  List<String> p = ['3333', '4', '4111', '555'];
+//  Map<String, dynamic> formData;
+//  _ChoiceScreenState() {
+//    formData = {
+//      'player': '3',
+//    };
+//  }
 
   @override
   void initState() {
@@ -62,85 +70,131 @@ class _ChoiceScreenState extends State<ChoiceScreen> {
       backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Hero(
-              tag: 'logo',
-              child: Container(
-                height: 30.0,
-                child: Image.asset('images/logo.png'),
-              ),
-            ),
-            SizedBox(
-              height: 48.0,
-            ),
-            TextField(
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-              ),
-              onChanged: (value) {
-                //Do something with the user input.
-                total = value;
-              },
-              decoration: InputDecoration(
-                hintText: 'Enter the size of room',
-                hintStyle: TextStyle(
-                  color: Colors.black54,
-                ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Hero(
+                tag: 'logo',
+                child: Container(
+                  height: 30.0,
+                  child: Image.asset('images/logo.png'),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 24.0,
-            ),
-            SizedBox(
-              height: 24.0,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () async {
-                    Future a = await updateTotal();
-                    //TODO: to theme screen
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ThemeScreen(
-                        id: id,
-                        email: email,
-                        total: total,
-                      );
-                    }));
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Select',
+              SizedBox(
+                height: 48.0,
+              ),
+//            TextField(
+//              textAlign: TextAlign.center,
+//              style: TextStyle(
+//                color: Colors.black,
+//              ),
+//              onChanged: (value) {
+//                //Do something with the user input.
+//                total = value;
+//              },
+//              decoration: InputDecoration(
+//                hintText: 'Enter the size of room',
+//                hintStyle: TextStyle(
+//                  color: Colors.black54,
+//                ),
+//                contentPadding:
+//                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+//                border: OutlineInputBorder(
+//                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+//                ),
+//                enabledBorder: OutlineInputBorder(
+//                  borderSide:
+//                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
+//                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+//                ),
+//                focusedBorder: OutlineInputBorder(
+//                  borderSide:
+//                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
+//                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+//                ),
+//              ),
+//            ),
+              DropdownButton<String>(
+                value: total,
+                icon: Icon(
+                  Icons.arrow_downward,
+                  color: Colors.black,
+                ),
+                iconSize: 24,
+                elevation: 16,
+                style: TextStyle(color: Colors.deepPurple),
+                hint: Text(
+                  'select room size *',
+                  style: TextStyle(color: Colors.red),
+                ),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    total = newValue;
+                  });
+                },
+                items: <String>['3', '4']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              //   Divider(height: 10.0, color: Theme.of(context).primaryColor),
+//              DropDownField(
+//                  value: formData['player'],
+//                  required: true,
+//                  strict: false,
+//                  labelText: 'Size of room *',
+//                  icon: Icon(Icons.account_balance),
+//                  items: p,
+//                  setter: (dynamic newValue) {
+//                    formData['player'] = newValue;
+//                  }),
+
+              SizedBox(
+                height: 24.0,
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  color: Colors.lightBlueAccent,
+                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                  elevation: 5.0,
+                  child: MaterialButton(
+                    onPressed: () async {
+                      //total = formData['player'].toString();
+                      Future a = await updateTotal();
+
+                      //TODO: to theme screen
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ThemeScreen(
+                          id: id,
+                          email: email,
+                          //total: total,
+                        );
+                      }));
+                    },
+                    minWidth: 200.0,
+                    height: 42.0,
+                    child: Text(
+                      'Select',
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

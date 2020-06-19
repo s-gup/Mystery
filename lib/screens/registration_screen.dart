@@ -18,8 +18,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/login4.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 14.0),
           child: Column(
@@ -29,8 +35,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Hero(
                 tag: 'logo',
                 child: Container(
-                  height: 40.0,
-                  child: Image.asset('images/logo.png'),
+                  height: 50.0,
+                  child: Image.asset('images/logo2.png'),
                 ),
               ),
               SizedBox(
@@ -58,11 +64,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 1.0),
+                    borderSide:
+                        BorderSide(color: Colors.deepPurple, width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 2.0),
+                    borderSide:
+                        BorderSide(color: Colors.deepPurple, width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                 ),
@@ -92,13 +100,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Colors.blueAccent, width: 1.0),
+                        BorderSide(color: Colors.deepPurple, width: 1.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        BorderSide(color: Colors.blueAccent, width: 2.0),
+                        BorderSide(color: Colors.deepPurple, width: 2.0),
                     borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                  ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  '* password atleast 6 characters long',
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.red,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -108,7 +126,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Material(
-                  color: Colors.blueAccent,
+                  color: Colors.deepPurple,
                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
                   elevation: 5.0,
                   child: MaterialButton(

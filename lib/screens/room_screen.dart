@@ -17,6 +17,7 @@ import 'back_end.dart';
 import 'join_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'choice_screen.dart';
+import 'theme_screen.dart';
 
 class RoomScreen extends StatefulWidget {
   static const String id = 'room_screen';
@@ -140,7 +141,7 @@ class _RoomScreenState extends State<RoomScreen> {
                       //Go to login screen.
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return ChoiceScreen(
+                        return ThemeScreen(
                           id: id,
                           email: email,
                         );

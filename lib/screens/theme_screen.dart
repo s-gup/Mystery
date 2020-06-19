@@ -26,18 +26,18 @@ import 'package:screen/screen.dart';
 class ThemeScreen extends StatefulWidget {
   final email;
   final id;
-  final total;
-  ThemeScreen({this.email, this.id, this.total});
+  //final total;
+  ThemeScreen({this.email, this.id});
   @override
   _ThemeScreenState createState() => _ThemeScreenState();
 }
 
 class _ThemeScreenState extends State<ThemeScreen> {
-  String selectedCard; // 0 for fun and 1 for logic
+  String selectedCard = 'fun'; // 0 for fun and 1 for logic
   int set = 50;
   String email;
   DatabaseReference roomRef;
-  String total;
+  String total = '3';
   String id;
   int player;
   List<String> hints;
@@ -55,7 +55,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
     //setTime();
     email = widget.email.toString();
     id = widget.id.toString();
-    total = widget.total;
+    //total = widget.total;
     player = int.parse(total);
     hints = List();
   }
@@ -138,6 +138,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
         'theme': selectedCard,
         'set': set.toString(),
         'common': commonMessage,
+        'total': total,
       },
     );
     print('listupdated$changed');
@@ -146,128 +147,170 @@ class _ThemeScreenState extends State<ThemeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('SELECT THEME'),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-//              mainAxisSize: MainAxisSize.min,
-//              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Expanded(
-                child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: ReusableCard(
-                    onPress: () {
-                      setState(() {
-                        selectedCard = 'logic';
-                      });
-                    },
-                    colour: selectedCard == 'logic'
-                        ? kActiveCardColor
-                        : kInactiveCardColor,
-                    cardChild: IconContents(
-                      icon: FontAwesomeIcons.mars,
-                      label: 'LOGIC',
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ReusableCard(
-                    onPress: () {
-                      setState(() {
-                        selectedCard = 'fun';
-                      });
-                    },
-                    colour: selectedCard == 'fun'
-                        ? kActiveCardColor
-                        : kInactiveCardColor,
-                    cardChild: IconContents(
-                      icon: FontAwesomeIcons.venus,
-                      label: 'FUN',
-                    ),
-                  ),
-                )
-              ],
-            )),
-            Expanded(
-              child: ReusableCard(
-                colour: kActiveCardColor,
-                cardChild: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'NUMBER',
-                        style: kLabelTestStyle,
+//        appBar: AppBar(
+//          title: Text('SELECT THEME'),
+//        ),
+        backgroundColor: Colors.white,
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/theme.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(
+                  child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: ReusableCard(
+                      onPress: () {
+                        setState(() {
+                          selectedCard = 'logic';
+                        });
+                      },
+                      colour: selectedCard == 'logic'
+                          ? kActiveCardColor
+                          : kInactiveCardColor,
+                      cardChild: IconContents(
+                        icon: FontAwesomeIcons.mars,
+                        label: 'LOGIC',
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: <Widget>[
-                          Text(
-                            set.toString(),
-                            style: kNumberTextStyle,
+                    ),
+                  ),
+                  Expanded(
+                    child: ReusableCard(
+                      onPress: () {
+                        setState(() {
+                          selectedCard = 'fun';
+                        });
+                      },
+                      colour: selectedCard == 'fun'
+                          ? kActiveCardColor
+                          : kInactiveCardColor,
+                      cardChild: IconContents(
+                        icon: FontAwesomeIcons.venus,
+                        label: 'FUN',
+                      ),
+                    ),
+                  )
+                ],
+              )),
+              Expanded(
+                child: ReusableCard(
+                  colour: kActiveCardColor,
+                  cardChild: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'QUESTION SET',
+                          style: kLabelTestStyle,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: <Widget>[
+                            Text(
+                              set.toString(),
+                              style: kNumberTextStyle,
+                            ),
+                          ],
+                        ),
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            inactiveTrackColor: Color(0xFF8D8E98),
+                            thumbColor: Color(0xFFEB1555),
+                            activeTrackColor: Colors.white,
+                            overlayColor: Color(0x29EB1555),
+                            thumbShape:
+                                RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                            overlayShape:
+                                RoundSliderOverlayShape(overlayRadius: 30.0),
                           ),
-                        ],
-                      ),
-                      SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          inactiveTrackColor: Color(0xFF8D8E98),
-                          thumbColor: Color(0xFFEB1555),
-                          activeTrackColor: Colors.white,
-                          overlayColor: Color(0x29EB1555),
-                          thumbShape:
-                              RoundSliderThumbShape(enabledThumbRadius: 15.0),
-                          overlayShape:
-                              RoundSliderOverlayShape(overlayRadius: 30.0),
+                          child: Slider(
+                            value: set.toDouble(),
+                            min: 1.0,
+                            max: 100.0,
+                            onChanged: (double newValue) {
+                              setState(() {
+                                set = newValue.round();
+                              });
+                            },
+                          ),
                         ),
-                        child: Slider(
-                          value: set.toDouble(),
-                          min: 1.0,
-                          max: 100.0,
-                          onChanged: (double newValue) {
-                            setState(() {
-                              set = newValue.round();
-                            });
-                          },
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: () async {
-                  //Future a = await updateThemeSet();
-                  Future b = await hello();
-                  //Future c = await addToHintList();
+              Expanded(
+                  child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: ReusableCard(
+                      onPress: () {
+                        setState(() {
+                          total = '3';
+                        });
+                      },
+                      colour:
+                          total == '3' ? kActiveCardColor : kInactiveCardColor,
+                      cardChild: IconContents(
+                        icon: FontAwesomeIcons.mars,
+                        label: '3 PLAYER ROOM',
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ReusableCard(
+                      onPress: () {
+                        setState(() {
+                          total = '4';
+                        });
+                      },
+                      colour:
+                          total == '4' ? kActiveCardColor : kInactiveCardColor,
+                      cardChild: IconContents(
+                        icon: FontAwesomeIcons.venus,
+                        label: '4 PLAYER ROOM',
+                      ),
+                    ),
+                  )
+                ],
+              )),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () async {
+                    //Future a = await updateThemeSet();
+                    Future b = await hello();
+                    //Future c = await addToHintList();
 //                  await Navigator.push(context,
 //                      MaterialPageRoute(builder: (context) {
 //                    return IdScreen(roomId: id, email: email);
 //                  }));
-                  //Go to login screen.
-                },
-                child: Container(
-                  child: Center(
-                    child: Text(
-                      'SUBMIT',
-                      style: kLargeButtonTextStyle,
+                    //Go to login screen.
+                  },
+                  child: Container(
+                    child: Center(
+                      child: Text(
+                        'SUBMIT',
+                        style: kLargeButtonTextStyle,
+                      ),
                     ),
+                    width: double.infinity,
+                    height: kBottomContainerHeight,
+                    color: kBottomContainerColor,
+                    margin: EdgeInsets.only(top: 10.0),
+                    padding: EdgeInsets.only(bottom: 20.0),
                   ),
-                  width: double.infinity,
-                  height: kBottomContainerHeight,
-                  color: kBottomContainerColor,
-                  margin: EdgeInsets.only(top: 10.0),
-                  padding: EdgeInsets.only(bottom: 20.0),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ));
   }
 }
@@ -284,7 +327,7 @@ class RoundIconButton extends StatelessWidget {
       elevation: 0.0,
       constraints: BoxConstraints.tightFor(width: 56.0, height: 56.0),
       shape: CircleBorder(),
-      fillColor: Color(0xFF4C4F5E),
+      fillColor: Colors.black,
     );
   }
 }

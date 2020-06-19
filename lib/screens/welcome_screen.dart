@@ -15,7 +15,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Animation animation;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     controller = AnimationController(
       duration: Duration(seconds: 1),
@@ -36,22 +35,25 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/detect6.jpg'),
+            image: AssetImage('images/start.jpg'),
             fit: BoxFit.cover,
           ),
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              SizedBox(
+                height: 48.0,
+              ),
               Row(
                 children: <Widget>[
                   Hero(
                     tag: 'logo',
                     child: Container(
-                      child: Image.asset('images/logo.png'),
+                      child: Image.asset('images/logo2.png'),
                       height: 60.0,
                     ),
                   ),
@@ -61,12 +63,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         fontSize: 30.0,
                         fontWeight: FontWeight.w900,
                         fontFamily: 'Spartan MB',
-                        color: Colors.white),
+                        color: Colors.blueAccent),
                   ),
                 ],
               ),
               SizedBox(
-                height: 48.0,
+                height: 30.0,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),

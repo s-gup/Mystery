@@ -62,7 +62,7 @@ const kBodyTextStyle = TextStyle(
   color: Colors.white,
 );
 
-const kBottomContainerColor = Color(0xFFEA1556);
-const kActiveCardColor = Color(0xFF1D1F33);
-const kInactiveCardColor = Color(0xFF111328);
-const kBottomContainerHeight = 60.0;
+const kBottomContainerColor = Colors.blueAccent;
+const kActiveCardColor = Color(0xFFEA1556);
+const kInactiveCardColor = Color(0xFFFFFF);
+const kBottomContainerHeight = 40.0;

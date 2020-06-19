@@ -321,65 +321,87 @@ class _WaitScreenState extends State<WaitScreen> with WidgetsBindingObserver {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('MYSTERY GAME !!'),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Center(
-              child: Icon(
-                Icons.alarm,
-                size: 100,
-              ),
+//        appBar: AppBar(
+//          title: Text('MYSTERY GAME !!'),
+//        ),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/wait.jpg'),
+              fit: BoxFit.cover,
             ),
-            Countdown(
-              seconds: sec,
-              build: (_, timer) => Text(
-                timer.toString(),
-                style: kMessageTextStyle,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Waiting for all the members to join :)',
+                style: TextStyle(
+                  fontFamily: 'Spartan MB',
+                  fontSize: 20.0,
+                  color: Colors.black,
+                ),
               ),
-              interval: Duration(
-                milliseconds: 100,
+              Center(
+                child: Icon(
+                  Icons.alarm,
+                  size: 100,
+                  color: Colors.black,
+                ),
               ),
-              onFinished: () async {
-                print('Timer is done!');
-                Future a = await getCount();
-                Future b = await getTotal();
-                if (count == total) {
-                  Future a = await getList();
-                  Future b = await getCurrentUser();
-                  Future c = await getHints();
-                  Future d = await getCommonMesage();
-                  print(hints);
-                  int index;
-                  for (int i = 0; i < 5; i++) {
-                    if (userObjs[i].email.trim() == email.trim()) {
-                      index = i;
-                      break;
+              Countdown(
+                seconds: sec,
+                build: (_, timer) => Text(
+                  timer.toString(),
+                  style: TextStyle(
+                    fontFamily: 'Spartan MB',
+                    fontSize: 30.0,
+                    color: Colors.black,
+                  ),
+                ),
+                interval: Duration(
+                  milliseconds: 100,
+                ),
+                onFinished: () async {
+                  print('Timer is done!');
+                  Future a = await getCount();
+                  Future b = await getTotal();
+                  if (count == total) {
+                    Future a = await getList();
+                    Future b = await getCurrentUser();
+                    Future c = await getHints();
+                    Future d = await getCommonMesage();
+                    print(hints);
+                    int index;
+                    for (int i = 0; i < 5; i++) {
+                      if (userObjs[i].email.trim() == email.trim()) {
+                        index = i;
+                        break;
+                      }
                     }
-                  }
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return HintScreen(
-                      hintKey: index + 1,
-                      idd: id,
-                      message: hints[index].toString(),
-                      commonMessage: commonMessage,
-                    );
-                  }));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return HintScreen(
+                        hintKey: index + 1,
+                        idd: id,
+                        message: hints[index].toString(),
+                        commonMessage: commonMessage,
+                      );
+                    }));
 //            Navigator.push(context, MaterialPageRoute(builder: (context) {
 //              return CommonScreen(
 //                userList: userObjs,
 //                idd: id,
 //              );
 //            }));
-                } else {
-                  Navigator.pushNamed(context, LoginScreen.id);
-                }
-              },
-            ),
-          ],
+                  } else {
+                    Navigator.pushNamed(context, LoginScreen.id);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
