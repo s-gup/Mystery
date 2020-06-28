@@ -158,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             cl.addinmap(_auth, email);
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return RoomScreen(email);
+                              return RoomScreen();
                             }));
                           }
                         } catch (e) {

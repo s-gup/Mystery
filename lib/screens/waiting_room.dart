@@ -366,7 +366,9 @@ class _WaitScreenState extends State<WaitScreen> with WidgetsBindingObserver {
                 onFinished: () async {
                   print('Timer is done!');
                   Future a = await getCount();
+
                   Future b = await getTotal();
+                  // count==total
                   if (count == total) {
                     Future a = await getList();
                     Future b = await getCurrentUser();

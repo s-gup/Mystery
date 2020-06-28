@@ -37,6 +37,7 @@ const kLabelTestStyle = TextStyle(
 const kNumberTextStyle = TextStyle(
   fontSize: 50.0,
   fontWeight: FontWeight.w900,
+  color: Colors.white,
 );
 const kLargeButtonTextStyle = TextStyle(
   fontSize: 25.0,
@@ -63,6 +64,7 @@ const kBodyTextStyle = TextStyle(
 );
 
 const kBottomContainerColor = Colors.blueAccent;
-const kActiveCardColor = Color(0xFFEA1556);
+const kActiveCardColor = Colors.deepOrange;
+// Color(0xFFEA1556);
 const kInactiveCardColor = Color(0xFFFFFF);
-const kBottomContainerHeight = 40.0;
+const kBottomContainerHeight = 10.0;

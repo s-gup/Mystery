@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 import 'package:flash_chat/screens/semi_final.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   ProgressDialog pr;
   String answer = '';
   String actualAns = '';
+  String explanation;
+  bool submitted = false;
   void messagesStream() async {
     await for (var snapshot in _firestore.collection(idd).snapshots()) {
       for (var message in snapshot.documents) {
@@ -116,6 +120,20 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
       answer = value.toString().trim();
       print(answer);
+    });
+  }
+
+  Future getExplanation() async {
+    roomRef = FirebaseDatabase.instance
+        .reference()
+        .child('roomList')
+        .child(idd)
+        .child('explanation');
+    var value;
+    await roomRef.once().then((DataSnapshot dataSnapshot) {
+      value = dataSnapshot.value;
+
+      explanation = value.toString().trim();
     });
   }
 
@@ -195,10 +213,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 onPressed: () async {
                   answer = customController.text.toString();
                   Future a = await updateAnswer();
+                  submitted = true;
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return ResultScreen(
                       userAnswer: answer,
                       actualAnswer: actualAns,
+                      explanation: explanation,
                     );
                   }));
                   //Navigator.pop(context);
@@ -210,19 +230,22 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 },
               ),
               Countdown(
-                  seconds: 15,
+                  seconds: 30,
                   build: (_, timer) => Text(timer.toString()),
                   interval: Duration(
                     milliseconds: 100,
                   ),
                   onFinished: () async {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ResultScreen(
-                        userAnswer: answer,
-                        actualAnswer: actualAns,
-                      );
-                    }));
+                    if (submitted == false) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ResultScreen(
+                          userAnswer: answer,
+                          actualAnswer: actualAns,
+                          explanation: explanation,
+                        );
+                      }));
+                    }
                   }),
             ],
           );
@@ -237,22 +260,25 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           return AlertDialog(
             title: Text("Waiting for leader to put answer"),
             actions: <Widget>[
-              Countdown(
-                  seconds: 20,
-                  build: (_, timer) => Text(timer.toString()),
-                  interval: Duration(
-                    milliseconds: 100,
-                  ),
-                  onFinished: () async {
-                    Future a = await getSavedAnswer();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ResultScreen(
-                        userAnswer: answer,
-                        actualAnswer: actualAns,
-                      );
-                    }));
-                  }),
+              Center(
+                child: Countdown(
+                    seconds: 35,
+                    build: (_, timer) => Text(timer.toString()),
+                    interval: Duration(
+                      milliseconds: 100,
+                    ),
+                    onFinished: () async {
+                      Future a = await getSavedAnswer();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ResultScreen(
+                          userAnswer: answer,
+                          actualAnswer: actualAns,
+                          explanation: explanation,
+                        );
+                      }));
+                    }),
+              ),
             ],
           );
         });
@@ -325,20 +351,23 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   Widget getAnswer() {
     return WillPopScope(
       onWillPop: _onBackPressed,
-      child: Countdown(
-          seconds: 600,
-          build: (_, timer) => Text(timer.toString()),
-          interval: Duration(
-            milliseconds: 100,
-          ),
-          onFinished: () async {
-            Future a = await getLeader();
-            Future b = await getCurrentUser();
-            Future c = await getActualAnswer();
-            leader = leader.trim();
-            currentMail = currentMail.trim();
-            if (currentMail == leader) {
-              await createAlertDialog(context);
+      child: Center(
+        child: Countdown(
+            seconds: 600,
+            //600,
+            build: (_, timer) => Text(timer.toString()),
+            interval: Duration(
+              milliseconds: 1000,
+            ),
+            onFinished: () async {
+              Future a = await getLeader();
+              Future b = await getCurrentUser();
+              Future c = await getActualAnswer();
+              Future d = await getExplanation();
+              leader = leader.trim();
+              currentMail = currentMail.trim();
+              if (currentMail == leader) {
+                await createAlertDialog(context);
 //            Countdown(
 //                seconds: 10,
 //                build: (_, timer) => Text(timer.toString()),
@@ -353,8 +382,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 //                  }));
 //                });
 
-            } else {
-              await createWaitAlertDialog(context);
+              } else {
+                await createWaitAlertDialog(context);
 //            Countdown(
 //                seconds: 13,
 //                build: (_, timer) => Text(timer.toString()),
@@ -369,8 +398,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 //                    );
 //                  }));
 //                });
-            }
-          }),
+              }
+            }),
+      ),
     );
   }
 
@@ -379,17 +409,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     return Scaffold(
       appBar: AppBar(
         leading: getAnswer(),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                _auth.signOut();
-                Navigator.pop(context);
-                //Implement logout functionality
-              }),
-        ],
-        title: Text('⚡️Chat'),
-        backgroundColor: Colors.black,
+//        actions: <Widget>[
+//          IconButton(
+//              icon: Icon(Icons.close),
+//              onPressed: () {
+//                _auth.signOut();
+//                Navigator.pop(context);
+//                //Implement logout functionality
+//              }),
+//        ],
+        title: Text('Discussion Room'),
+        backgroundColor: Colors.black45,
       ),
       body: Container(
         color: Colors.white,

@@ -58,7 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     ),
                   ),
                   Text(
-                    'MYSTERY APP',
+                    'NEORON',
                     style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.w900,

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'chat_screen.dart';
@@ -148,10 +149,14 @@ class _HintScreenState extends State<HintScreen> with WidgetsBindingObserver {
                         style: kTempTextStyle,
                       ),
                       Countdown(
+                        //120
                         seconds: 120,
-                        build: (_, timer) => Text(timer.toString()),
+                        build: (_, timer) => Text(
+                          timer.toString(),
+                          style: TextStyle(color: Colors.white, fontSize: 20.0),
+                        ),
                         interval: Duration(
-                          milliseconds: 100,
+                          milliseconds: 1000,
                         ),
                         onFinished: () {
                           Navigator.push(context,
