@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     email = value;
                   },
                   decoration: InputDecoration(
-                    hintText: 'Enter your email',
+                    hintText: 'Enter your username',
                     hintStyle: TextStyle(
                       color: Colors.black54,
                     ),
@@ -149,6 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     elevation: 5.0,
                     child: MaterialButton(
                       onPressed: () async {
+                        email+="@neoron.com";
                         try {
                           final userd = (await _auth.signInWithEmailAndPassword(
                                   email: email.trim(), password: password))

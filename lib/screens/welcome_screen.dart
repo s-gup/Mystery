@@ -113,6 +113,48 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   ),
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(30.0),
+                  elevation: 5.0,
+                  child: MaterialButton(
+                    highlightColor: Colors.blueAccent,
+                    //splashColor: Colors.blueAccent,
+                    onPressed: () {
+                      Navigator.pushNamed(context, RegistrationScreen.id);
+                      //Go to registration screen.
+                    },
+                    minWidth: 200.0,
+                    height: 42.0,
+                    child: Text(
+                      'Instructions',
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Material(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(30.0),
+                  elevation: 5.0,
+                  child: MaterialButton(
+                    highlightColor: Colors.blueAccent,
+                    //splashColor: Colors.blueAccent,
+                    onPressed: () {
+                      Navigator.pushNamed(context, RegistrationScreen.id);
+                      //Go to registration screen.
+                    },
+                    minWidth: 200.0,
+                    height: 42.0,
+                    child: Text(
+                      'About Our Team',
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

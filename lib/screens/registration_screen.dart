@@ -53,7 +53,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   //Do something with the user input.
                 },
                 decoration: InputDecoration(
-                  hintText: 'Enter your email',
+                  hintText: 'Enter your username',
                   hintStyle: TextStyle(
                     color: Colors.black54,
                   ),
@@ -132,6 +132,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: MaterialButton(
                     onPressed: () async {
                       try {
+                        email+="@neoron.com";
                         final newUser =
                             await _auth.createUserWithEmailAndPassword(
                                 email: email, password: password);

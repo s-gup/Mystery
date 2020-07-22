@@ -11,6 +11,8 @@ dependencies:
   auto_size_text: ^2.1.0
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.3
+  flutter_launcher_name: ^0.0.1
 
   cupertino_icons: ^0.1.2
   firebase_core: ^0.4.5
@@ -35,6 +37,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/icon.jpg"
+flutter_launcher_name:
+  name: "NEORON"
 
 flutter:
   uses-material-design: true
