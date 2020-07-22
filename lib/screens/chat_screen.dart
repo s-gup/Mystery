@@ -198,6 +198,75 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   createAlertDialog(BuildContext context) async {
     TextEditingController customController = TextEditingController();
+
+    showGeneralDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor: Colors.black45,
+        transitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (BuildContext buildContext, Animation animation,
+            Animation secondaryAnimation) {
+          return Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width - 10,
+              height: MediaQuery.of(context).size.height - 80,
+              padding: EdgeInsets.all(20),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Text("Your Answer ?"),
+                  TextField(
+                    controller: customController,
+                  ),
+                  RaisedButton(
+                    onPressed: () async {
+                      answer = customController.text.toString();
+                      Future a = await updateAnswer();
+                      submitted = true;
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ResultScreen(
+                          userAnswer: answer,
+                          actualAnswer: actualAns,
+                          explanation: explanation,
+                        );
+                      }));
+                    },
+                    child: Text(
+                      "SUBMIT",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    color: const Color(0xFF1BC0C5),
+                  ),
+                  Countdown(
+                      seconds: 30,
+                      build: (_, timer) => Text(timer.toString()),
+                      interval: Duration(
+                        milliseconds: 100,
+                      ),
+                      onFinished: () async {
+                        if (submitted == false) {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ResultScreen(
+                              userAnswer: answer,
+                              actualAnswer: actualAns,
+                              explanation: explanation,
+                            );
+                          }));
+                        }
+                      }),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  createAlertDialog1(BuildContext context) async {
+    TextEditingController customController = TextEditingController();
     return showDialog(
         context: context,
         builder: (context) {
@@ -253,6 +322,51 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   createWaitAlertDialog(BuildContext context) async {
+    showGeneralDialog(
+        context: context,
+        barrierDismissible: false,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor: Colors.black45,
+        transitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (BuildContext buildContext, Animation animation,
+            Animation secondaryAnimation) {
+          return Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width - 10,
+              height: MediaQuery.of(context).size.height - 80,
+              padding: EdgeInsets.all(20),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Text('waiting for leader to submit answer'),
+                  Center(
+                    child: Countdown(
+                        seconds: 35,
+                        build: (_, timer) => Text(timer.toString()),
+                        interval: Duration(
+                          milliseconds: 100,
+                        ),
+                        onFinished: () async {
+                          Future a = await getSavedAnswer();
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ResultScreen(
+                              userAnswer: answer,
+                              actualAnswer: actualAns,
+                              explanation: explanation,
+                            );
+                          }));
+                        }),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  createWaitAlertDialog1(BuildContext context) async {
     //TextEditingController customController = TextEditingController();
     return showDialog(
         context: context,
@@ -429,7 +543,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               StreamBuilder<QuerySnapshot>(
-                stream: _firestore.collection(idd).orderBy('timestamp', descending: true).snapshots(),
+                stream: _firestore
+                    .collection(idd)
+                    .orderBy('timestamp', descending: true)
+                    .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
@@ -485,10 +602,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       onPressed: () {
                         messageTextController.clear();
                         _firestore.collection(idd).add({
-                          'text': messagetext ,
+                          'text': messagetext,
                           'sender': loggin.email,
-                          'timestamp':
-                          DateTime.now().toUtc().millisecondsSinceEpoch,
+                          'timestamp': DateTime.now().millisecondsSinceEpoch,
                         });
                         //Implement send functionality.
                       },

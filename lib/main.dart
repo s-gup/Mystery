@@ -43,7 +43,7 @@ class FlashChat extends StatelessWidget {
           body1: TextStyle(color: Colors.black54),
         ),
       ),
-      //initialRoute: WelcomeScreen.id,
+      //initialRoute: ChatScreen.id,
       initialRoute: WelcomeScreen.id,
       routes: {
         LoadingScreen.id: (context) => LoadingScreen(),
