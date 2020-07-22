@@ -1,3 +1,5 @@
+import 'package:flash_chat/screens/instruct.dart';
+import 'package:flash_chat/screens/team.dart';
 import 'package:flutter/material.dart';
 
 import 'login_screen.dart';
@@ -123,7 +125,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     highlightColor: Colors.blueAccent,
                     //splashColor: Colors.blueAccent,
                     onPressed: () {
-                      Navigator.pushNamed(context, RegistrationScreen.id);
+                      Navigator.pushNamed(context, InstructScreen.id);
                       //Go to registration screen.
                     },
                     minWidth: 200.0,
@@ -144,7 +146,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     highlightColor: Colors.blueAccent,
                     //splashColor: Colors.blueAccent,
                     onPressed: () {
-                      Navigator.pushNamed(context, RegistrationScreen.id);
+                      Navigator.pushNamed(context, TeamScreen.id);
                       //Go to registration screen.
                     },
                     minWidth: 200.0,

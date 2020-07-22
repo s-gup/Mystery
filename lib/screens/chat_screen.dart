@@ -429,7 +429,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               StreamBuilder<QuerySnapshot>(
-                stream: _firestore.collection(idd).snapshots(),
+                stream: _firestore.collection(idd).orderBy('timestamp', descending: true).snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
@@ -438,21 +438,18 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       ),
                     );
                   }
-                  final messages = snapshot.data.documents.reversed;
+                  final messages = snapshot.data.documents;
                   List<MessageBubble> messageWidgets = [];
                   for (var message in messages) {
                     final messageText = message.data['text'].toString();
                     final messagesender = message.data['sender'].toString();
-                    final messageTime = message.data['time'];
                     final currentUser = loggin.email;
                     final messagewidge = MessageBubble(
                       sender: messagesender,
                       text: messageText,
-                      time: messageTime,
                       isme: currentUser == messagesender,
                     );
                     messageWidgets.add(messagewidge);
-                    messageWidgets.sort((a , b ) => b.time.compareTo(a.time));
                   }
                   return Expanded(
                     child: ListView(
@@ -488,9 +485,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       onPressed: () {
                         messageTextController.clear();
                         _firestore.collection(idd).add({
-                          'text': messagetext ?? '',
+                          'text': messagetext ,
                           'sender': loggin.email,
-                          'date': DateTime.now().toIso8601String().toString(),
+                          'timestamp':
+                          DateTime.now().toUtc().millisecondsSinceEpoch,
                         });
                         //Implement send functionality.
                       },
@@ -511,12 +509,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 }
 
 class MessageBubble extends StatelessWidget {
-
+  MessageBubble({this.sender, this.text, this.isme});
   final String sender;
   final String text;
   final bool isme;
-  final Timestamp time;
-  MessageBubble({this.sender, this.text, this.isme,this.time});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -526,7 +522,7 @@ class MessageBubble extends StatelessWidget {
             isme ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "$sender ${time.toDate()}",
+            sender,
             style: TextStyle(
               fontSize: 12.0,
               color: Colors.black54,
