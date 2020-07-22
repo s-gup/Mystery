@@ -29,6 +29,8 @@ import 'screens/welcome_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/result_screen.dart';
 import 'screens/loading_screen.dart';
+import 'screens/team.dart';
+import 'screens/instruct.dart';
 
 void main() => runApp(FlashChat());
 
@@ -41,7 +43,8 @@ class FlashChat extends StatelessWidget {
           body1: TextStyle(color: Colors.black54),
         ),
       ),
-      initialRoute: WelcomeScreen.id,
+      //initialRoute: WelcomeScreen.id,
+      initialRoute: InstructScreen.id,
       routes: {
         LoadingScreen.id: (context) => LoadingScreen(),
         WelcomeScreen.id: (context) => WelcomeScreen(),
@@ -56,7 +59,8 @@ class FlashChat extends StatelessWidget {
         IdScreen.id: (context) => IdScreen(),
         //RoomScreen.id: (context) => RoomScreen(),
         CommonScreen.id: (context) => CommonScreen(),
-        //WaitScreen.id: (context) => WaitScreen(),
+        TeamScreen.id: (context) => TeamScreen(),
+        InstructScreen.id: (context) => InstructScreen(),
       },
     );
   }

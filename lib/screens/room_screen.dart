@@ -167,83 +167,102 @@ class _RoomScreenState extends State<RoomScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                SizedBox(
-                  height: 200,
-                ),
-                Container(
-                  alignment: Alignment(0.5, 0),
-                  width: 100.0,
-                  height: 40,
-                  child: Material(
-                    elevation: 5.0,
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(30.0),
-                    child: MaterialButton(
-                      splashColor: Colors.red,
-                      onPressed: () async {
-                        Future b = await getCurrentUser();
-                        String id = await createNewRoom();
+//                SizedBox(
+//                  height: 200,
+//                ),
+                Expanded(
+                    flex: 30,
+                    child: Container(
+                      height: 0,
+                      width: 0,
+                    )),
+
+                Expanded(
+                  flex: 10,
+                  child: Container(
+                    alignment: Alignment(0.5, 0),
+//                    width: 100.0,
+//                    height: 40,
+                    child: Material(
+                      elevation: 5.0,
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(30.0),
+                      child: MaterialButton(
+                        splashColor: Colors.red,
+                        onPressed: () async {
+                          Future b = await getCurrentUser();
+                          String id = await createNewRoom();
 
 //                      Navigator.push(context,
 //                          MaterialPageRoute(builder: (context) {
 //                        return IdScreen(roomId: id, email: email);
 //                      }));
-                        //Go to login screen.
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return ThemeScreen(
-                            id: id,
-                            email: email,
-                          );
-                        }));
-                      },
-                      minWidth: 200.0,
-                      height: 42.0,
-                      child: Text(
-                        'CREATE ROOM',
-                        style: TextStyle(
-                          fontFamily: 'Spartan MB',
-                          fontSize: 15.0,
-                          color: Colors.white,
+                          //Go to login screen.
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return ThemeScreen(
+                              id: id,
+                              email: email,
+                            );
+                          }));
+                        },
+                        minWidth: 200.0,
+                        //height: 10.0,
+                        child: Text(
+                          'CREATE ROOM',
+                          style: TextStyle(
+                            fontFamily: 'Spartan MB',
+                            fontSize: 15.0,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  alignment: Alignment(0.5, 0),
-                  width: 100.0,
-                  height: 40,
-                  child: Material(
-                    elevation: 5.0,
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(30.0),
-                    child: MaterialButton(
-                      splashColor: Colors.red,
-                      onPressed: () async {
-                        Future a = await getCurrentUser();
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return JoinScreen(email);
-                        }));
-                        //Go to login screen.
-                      },
-                      minWidth: 200.0,
-                      height: 42.0,
-                      child: Text(
-                        'JOIN ROOM',
-                        style: TextStyle(
-                          fontFamily: 'Spartan MB',
-                          fontSize: 15.0,
-                          color: Colors.white,
+//                SizedBox(
+//                  height: 30,
+//                ),
+                Expanded(
+                  flex: 10,
+                  child: Container(
+                    alignment: Alignment(0.5, 0),
+//                    width: 100.0,
+//                    height: 40,
+                    child: Material(
+                      elevation: 5.0,
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(30.0),
+                      child: MaterialButton(
+                        splashColor: Colors.red,
+                        onPressed: () async {
+                          Future a = await getCurrentUser();
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return JoinScreen(email);
+                          }));
+                          //Go to login screen.
+                        },
+                        minWidth: 200.0,
+                        height: 10.0,
+                        child: Text(
+                          'JOIN ROOM',
+                          style: TextStyle(
+                            fontFamily: 'Spartan MB',
+                            fontSize: 15.0,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
+                Expanded(
+                    flex: 50,
+                    child: Container(
+                      height: 0,
+                      width: 0,
+                    ))
               ],
             ),
           ),
