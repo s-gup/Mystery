@@ -127,24 +127,24 @@ class _RoomScreenState extends State<RoomScreen> {
 
   Future<bool> _onBackPressed() {
     return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit an App'),
-        actions: <Widget>[
-          new GestureDetector(
-            onTap: () => Navigator.of(context).pop(false),
-            child: Text("NO"),
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: Text("NO"),
+              ),
+              SizedBox(height: 16),
+              new GestureDetector(
+                onTap: () => SystemNavigator.pop(),
+                //Navigator.pushNamed(context, LoginScreen.id),
+                child: Text("YES"),
+              ),
+            ],
           ),
-          SizedBox(height: 16),
-          new GestureDetector(
-            onTap: () => SystemNavigator.pop(),
-            //Navigator.pushNamed(context, LoginScreen.id),
-            child: Text("YES"),
-          ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 
@@ -200,11 +200,11 @@ class _RoomScreenState extends State<RoomScreen> {
                           //Go to login screen.
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                                return ThemeScreen(
-                                  id: id,
-                                  email: email,
-                                );
-                              }));
+                            return ThemeScreen(
+                              id: id,
+                              email: email,
+                            );
+                          }));
                         },
                         minWidth: 200.0,
                         //height: 10.0,
@@ -239,8 +239,8 @@ class _RoomScreenState extends State<RoomScreen> {
                           Future a = await getCurrentUser();
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                                return JoinScreen(email);
-                              }));
+                            return JoinScreen(email);
+                          }));
                           //Go to login screen.
                         },
                         minWidth: 200.0,

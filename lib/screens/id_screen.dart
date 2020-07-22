@@ -88,7 +88,6 @@ class _IdScreenState extends State<IdScreen> {
           ),
           child: SingleChildScrollView(
             child: Column(
-              
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -124,7 +123,8 @@ class _IdScreenState extends State<IdScreen> {
                           child: RaisedButton.icon(
                             icon: Icon(Icons.content_copy),
                             onPressed: () {
-                              Clipboard.setData(new ClipboardData(text: roomId));
+                              Clipboard.setData(
+                                  new ClipboardData(text: roomId));
                               Scaffold.of(context).showSnackBar(new SnackBar(
                                 content: Text(
                                   "Copied to Clipboard",
