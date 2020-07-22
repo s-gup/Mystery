@@ -19,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
+  String errorMessage = "";
 
   Future<bool> _onBackPressed() {
     return showDialog(
@@ -149,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     elevation: 5.0,
                     child: MaterialButton(
                       onPressed: () async {
-                        email+="@neoron.com";
+                        email += "@neoron.com";
                         try {
                           final userd = (await _auth.signInWithEmailAndPassword(
                                   email: email.trim(), password: password))
@@ -164,6 +165,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         } catch (e) {
                           print(e);
+                          setState(() {
+                            errorMessage = "* Wrong username or password";
+                          });
                         }
 
                         //Implement login functionality.
@@ -173,6 +177,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         'Log In',
                       ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    errorMessage,
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      color: Colors.red,
+                      fontSize: 15,
                     ),
                   ),
                 ),

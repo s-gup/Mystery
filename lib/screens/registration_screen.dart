@@ -15,6 +15,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
+  String errorMessage = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +133,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: MaterialButton(
                     onPressed: () async {
                       try {
-                        email+="@neoron.com";
+                        email += "@neoron.com";
                         final newUser =
                             await _auth.createUserWithEmailAndPassword(
                                 email: email, password: password);
@@ -142,6 +143,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         }
                       } catch (e) {
                         print(e);
+                        setState(() {
+                          errorMessage = "* This username already exists";
+                        });
                       }
                       //Implement registration functionality.
                     },
@@ -151,6 +155,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       'Register',
                       style: TextStyle(color: Colors.white),
                     ),
+                  ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  errorMessage,
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.red,
+                    fontSize: 15,
                   ),
                 ),
               ),
