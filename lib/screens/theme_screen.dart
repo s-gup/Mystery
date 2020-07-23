@@ -238,7 +238,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                       child: Slider(
                         value: set.toDouble(),
                         min: 1.0,
-                        max: 5.0,
+                        max: 70.0,
                         onChanged: (double newValue) {
                           setState(() {
                             set = newValue.round();

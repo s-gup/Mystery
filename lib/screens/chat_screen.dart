@@ -359,7 +359,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               color: Colors.white,
               child: Column(
                 children: [
-                  Text('Waiting for leader to submit the answer !!'),
+                  Text(
+                    'Waiting for leader to submit the answer !!',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.black,
+                    ),
+                  ),
                   Center(
                     child: Countdown(
                         seconds: 35,

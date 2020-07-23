@@ -133,6 +133,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   child: MaterialButton(
                     onPressed: () async {
                       try {
+                        email = email.trim();
                         email += "@neoron.com";
                         final newUser =
                             await _auth.createUserWithEmailAndPassword(
