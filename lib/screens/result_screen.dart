@@ -33,6 +33,12 @@ class _ResultScreenState extends State<ResultScreen> {
   Widget getAnswer() {
     if (answer.trim().toLowerCase() == actualAnswer.trim().toLowerCase()) {
       return Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/result.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -44,11 +50,14 @@ class _ResultScreenState extends State<ResultScreen> {
                   Text(
                     'CORRECT ANSWER',
                     //textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 30, color: Colors.green),
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.green,
+                        fontWeight: FontWeight.w900),
                   ),
                   Center(
                     child: Icon(
-                      Icons.clear,
+                      Icons.check,
                       size: 40,
                       color: Colors.green,
                     ),
@@ -66,17 +75,17 @@ class _ResultScreenState extends State<ResultScreen> {
                       style: TextStyle(
                         fontFamily: 'Spartan MB',
                         fontSize: 30.0,
-                        color: Colors.blueAccent,
+                        color: Colors.deepOrange,
                       ),
                     ),
                     Card(
-                      color: Colors.brown,
+                      color: Colors.lightBlue,
                       child: AutoSizeText(
                         answer,
                         style: TextStyle(
                           fontFamily: 'Spartan MB',
                           fontSize: 20.0,
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.normal,
                         ),
                       ),
@@ -92,18 +101,18 @@ class _ResultScreenState extends State<ResultScreen> {
                       style: TextStyle(
                         fontFamily: 'Spartan MB',
                         fontSize: 30.0,
-                        color: Colors.blueAccent,
+                        color: Colors.deepOrange,
                       ),
                     ),
                     Card(
-                      color: Colors.brown,
+                      color: Colors.lightBlue,
                       child: AutoSizeText(
                         actualAnswer,
                         style: TextStyle(
                           fontFamily: 'Spartan MB',
                           fontSize: 20.0,
                           fontWeight: FontWeight.normal,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                     )
@@ -118,11 +127,11 @@ class _ResultScreenState extends State<ResultScreen> {
                       style: TextStyle(
                         fontFamily: 'Spartan MB',
                         fontSize: 30.0,
-                        color: Colors.blueAccent,
+                        color: Colors.deepOrange,
                       ),
                     ),
                     Card(
-                      color: Colors.brown,
+                      color: Colors.lightBlue,
                       child: Center(
                         child: AutoSizeText(
                           explanation,
@@ -130,7 +139,7 @@ class _ResultScreenState extends State<ResultScreen> {
                             fontFamily: 'Spartan MB',
                             fontSize: 20.0,
                             fontWeight: FontWeight.normal,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -172,6 +181,12 @@ class _ResultScreenState extends State<ResultScreen> {
       );
     } else {
       return Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/result.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -183,7 +198,10 @@ class _ResultScreenState extends State<ResultScreen> {
                   Text(
                     'WRONG ANSWER',
                     //textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 30, color: Colors.red),
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.red,
+                        fontWeight: FontWeight.w900),
                   ),
                   Center(
                     child: Icon(
@@ -205,17 +223,17 @@ class _ResultScreenState extends State<ResultScreen> {
                       style: TextStyle(
                         fontFamily: 'Spartan MB',
                         fontSize: 30.0,
-                        color: Colors.blueAccent,
+                        color: Colors.deepOrange,
                       ),
                     ),
                     Card(
-                      color: Colors.brown,
+                      color: Colors.lightBlue,
                       child: AutoSizeText(
                         answer,
                         style: TextStyle(
                           fontFamily: 'Spartan MB',
                           fontSize: 20.0,
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.normal,
                         ),
                       ),
@@ -231,18 +249,18 @@ class _ResultScreenState extends State<ResultScreen> {
                       style: TextStyle(
                         fontFamily: 'Spartan MB',
                         fontSize: 30.0,
-                        color: Colors.blueAccent,
+                        color: Colors.deepOrange,
                       ),
                     ),
                     Card(
-                      color: Colors.brown,
+                      color: Colors.lightBlue,
                       child: AutoSizeText(
                         actualAnswer,
                         style: TextStyle(
                           fontFamily: 'Spartan MB',
                           fontSize: 20.0,
                           fontWeight: FontWeight.normal,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                       ),
                     )
@@ -257,11 +275,11 @@ class _ResultScreenState extends State<ResultScreen> {
                       style: TextStyle(
                         fontFamily: 'Spartan MB',
                         fontSize: 30.0,
-                        color: Colors.blueAccent,
+                        color: Colors.deepOrange,
                       ),
                     ),
                     Card(
-                      color: Colors.brown,
+                      color: Colors.lightBlue,
                       child: Center(
                         child: AutoSizeText(
                           explanation,
@@ -269,7 +287,7 @@ class _ResultScreenState extends State<ResultScreen> {
                             fontFamily: 'Spartan MB',
                             fontSize: 20.0,
                             fontWeight: FontWeight.normal,
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         ),
                       ),

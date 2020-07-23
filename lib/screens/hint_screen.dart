@@ -150,7 +150,7 @@ class _HintScreenState extends State<HintScreen> with WidgetsBindingObserver {
                       ),
                       Countdown(
                         //120
-                        seconds: 120,
+                        seconds: 180,
                         build: (_, timer) => Text(
                           timer.toString(),
                           style: TextStyle(color: Colors.white, fontSize: 20.0),

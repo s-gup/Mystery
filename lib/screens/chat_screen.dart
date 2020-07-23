@@ -211,54 +211,74 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           return Center(
             child: Container(
               width: MediaQuery.of(context).size.width - 10,
-              height: MediaQuery.of(context).size.height - 80,
+              height: MediaQuery.of(context).size.height / 3,
               padding: EdgeInsets.all(20),
               color: Colors.white,
-              child: Column(
-                children: [
-                  Text("Your Answer ?"),
-                  TextField(
-                    controller: customController,
-                  ),
-                  RaisedButton(
-                    onPressed: () async {
-                      answer = customController.text.toString();
-                      Future a = await updateAnswer();
-                      submitted = true;
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ResultScreen(
-                          userAnswer: answer,
-                          actualAnswer: actualAns,
-                          explanation: explanation,
-                        );
-                      }));
-                    },
-                    child: Text(
-                      "SUBMIT",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    color: const Color(0xFF1BC0C5),
-                  ),
-                  Countdown(
-                      seconds: 30,
-                      build: (_, timer) => Text(timer.toString()),
-                      interval: Duration(
-                        milliseconds: 100,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text(
+                      "Your Answer ?",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.black,
                       ),
-                      onFinished: () async {
-                        if (submitted == false) {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return ResultScreen(
-                              userAnswer: answer,
-                              actualAnswer: actualAns,
-                              explanation: explanation,
-                            );
-                          }));
-                        }
-                      }),
-                ],
+                    ),
+                    Material(
+                      color: Colors.black26,
+                      child: TextField(
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Enter your answer'),
+                        controller: customController,
+                      ),
+                    ),
+                    RaisedButton(
+                      onPressed: () async {
+                        answer = customController.text.toString();
+                        Future a = await updateAnswer();
+                        submitted = true;
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ResultScreen(
+                            userAnswer: answer,
+                            actualAnswer: actualAns,
+                            explanation: explanation,
+                          );
+                        }));
+                      },
+                      child: Text(
+                        "SUBMIT",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: const Color(0xFF1BC0C5),
+                    ),
+                    Countdown(
+                        seconds: 30,
+                        build: (_, timer) => Text(
+                              timer.toString(),
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.black,
+                              ),
+                            ),
+                        interval: Duration(
+                          milliseconds: 100,
+                        ),
+                        onFinished: () async {
+                          if (submitted == false) {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ResultScreen(
+                                userAnswer: answer,
+                                actualAnswer: actualAns,
+                                explanation: explanation,
+                              );
+                            }));
+                          }
+                        }),
+                  ],
+                ),
               ),
             ),
           );
@@ -334,16 +354,22 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           return Center(
             child: Container(
               width: MediaQuery.of(context).size.width - 10,
-              height: MediaQuery.of(context).size.height - 80,
+              height: MediaQuery.of(context).size.height / 3,
               padding: EdgeInsets.all(20),
               color: Colors.white,
               child: Column(
                 children: [
-                  Text('waiting for leader to submit answer'),
+                  Text('Waiting for leader to submit the answer !!'),
                   Center(
                     child: Countdown(
                         seconds: 35,
-                        build: (_, timer) => Text(timer.toString()),
+                        build: (_, timer) => Text(
+                              timer.toString(),
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Colors.black,
+                              ),
+                            ),
                         interval: Duration(
                           milliseconds: 100,
                         ),
